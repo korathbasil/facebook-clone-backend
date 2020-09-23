@@ -24,7 +24,7 @@ mongoose.connect(process.env.DB_CONNECTION_URL, {
 
 // Middlewares
 app.use(express.json());
-app.use(bodyParser());
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // API Routes
 app.get("/", (req, res) => {
@@ -52,7 +52,7 @@ app.post("/post", (req, res) => {
   });
 });
 
-app.use("./auth", authRoute);
+app.use("/auth", authRoute);
 
 // // SignUp Route
 // app.post("/signup", (req, res) => {
