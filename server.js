@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-const Posts = require("./model/dbPosts.js");
+const Posts = require("./model/posts.js");
+const Users = require("./model/users.js");
 
 // App config
 const app = express();
