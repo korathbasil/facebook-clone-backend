@@ -1,7 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+// const dotenv = require("dotenv");
 const User = require("../model/Users");
-const { signupSchema, loginSchema } = require("../model/validation");
+const { signupSchema, loginSchema } = require("../util/validation");
+
+// dotenv.config();
 
 const router = express.Router();
 router.put("/signup", async (req, res) => {
@@ -39,7 +43,14 @@ router.post("/login", async (req, res) => {
     req.body.password,
     selectedUser.password
   );
+
+  //   Create and assign token
   if (!isPasswordValid) return res.status(400).send("Incorrect password");
+  const token = jwt.sign(
+    { id: selectedUser._id },
+    process.env.ACCESS_TOKEN_SECRET
+  );
+  res.header("auth-token", token).send(token);
   res.status(201).send("Logged in");
 });
 
