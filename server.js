@@ -1,6 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
+
+// Route imports
+const authRoute = require("./routes/auth.js");
 
 // Model imports
 const Posts = require("./model/Posts.js");
@@ -20,6 +24,7 @@ mongoose.connect(process.env.DB_CONNECTION_URL, {
 
 // Middlewares
 app.use(express.json());
+app.use(bodyParser());
 
 // API Routes
 app.get("/", (req, res) => {
@@ -47,18 +52,20 @@ app.post("/post", (req, res) => {
   });
 });
 
-// SignUp Route
-app.post("/signup", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  Users.create({ email: email, password: password }, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
+app.use("./auth", authRoute);
+
+// // SignUp Route
+// app.post("/signup", (req, res) => {
+//   const email = req.body.email;
+//   const password = req.body.password;
+//   Users.create({ email: email, password: password }, (err, data) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.status(201).send(data);
+//     }
+//   });
+// });
 
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));
