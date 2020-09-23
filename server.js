@@ -1,17 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-const Posts = require("./model/posts.js");
-const Users = require("./model/users.js");
+// Model imports
+const Posts = require("./model/Posts.js");
+const Users = require("./model/Users.js");
 
 // App config
 const app = express();
 PORT = process.env.PORT || 8000;
+dotenv.config();
 
 //DB config
-const dbConnectionUrl =
-  "mongodb+srv://admin:bnmP7PDnPEmWTiSv@cluster0.u5egm.mongodb.net/facebookDB?retryWrites=true&w=majority";
-mongoose.connect(dbConnectionUrl, {
+mongoose.connect(process.env.DB_CONNECTION_URL, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -38,6 +39,19 @@ app.get("/posts", (req, res) => {
 app.post("/post", (req, res) => {
   const post = req.body;
   Posts.create(post, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// SignUp Route
+app.post("/signup", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  Users.create({ email: email, password: password }, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
