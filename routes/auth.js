@@ -44,13 +44,20 @@ router.post("/login", async (req, res) => {
   );
 
   //   Create and assign token
-  if (!isPasswordValid) return res.status(400).send("Incorrect password");
+  if (!isPasswordValid)
+    return res.status(400).json({ message: "Incorrect password" });
   const token = jwt.sign(
     { id: selectedUser._id },
     process.env.ACCESS_TOKEN_SECRET
   );
   res.header("auth-token", token);
-  res.status(201).send("Logged in");
+  res
+    .status(201)
+    .json({
+      email: selectedUser.email,
+      displayName: selectedUser.displayName,
+      avatar: selectedUser.avatar,
+    });
 });
 
 module.exports = router;
