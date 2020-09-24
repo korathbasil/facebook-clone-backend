@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 // Route imports
 const authRoute = require("./routes/auth.js");
@@ -15,12 +15,16 @@ const app = express();
 PORT = process.env.PORT || 8000;
 dotenv.config();
 
-//DB config
-mongoose.connect(process.env.DB_CONNECTION_URL, {
-  useCreateIndex: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// DB config
+mongoose.connect(
+  "mongodb+srv://administrator:u9B8dWyYbVU2juGw@cluster0.u5egm.mongodb.net/fbCloneDB?retryWrites=true&w=majority",
+  {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => console.log("Database connected")
+);
 
 // Middlewares
 app.use(express.json());
@@ -31,20 +35,20 @@ app.get("/", (req, res) => {
   res.status(200).send("hello world");
 });
 
-app.get("/users", (req, res) => {
-  Users.find({}, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  });
-});
+// app.get("/users", (req, res) => {
+//   Users.find({}, (err, data) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.status(200).send(data);
+//     }
+//   });
+// });
 
 app.get("/posts", (req, res) => {
   Posts.find({}, (err, data) => {
     if (err) {
-      res.status(500).send(err);
+      res.status(500).json({ message: err.message });
     } else {
       res.status(200).send(data);
     }
@@ -58,6 +62,27 @@ app.post("/post", (req, res) => {
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
+    }
+  });
+});
+
+// app.post("/signup", (req, res) => {
+//   const user = req.body;
+//   Users.create(user, (err, data) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.status(201).send(data);
+//     }
+//   });
+// });
+
+app.get("/users", (req, res) => {
+  Users.find({}, (err, data) => {
+    if (err) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(200).send(data);
     }
   });
 });

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const potsSchema = mongoose.Schema({
+const postsSchema = mongoose.Schema({
   displayName: String,
   avatar: String,
   caption: String,
@@ -10,4 +10,4 @@ const potsSchema = mongoose.Schema({
   sharesCount: Number,
 });
 
-module.exports = mongoose.model("Posts", potsSchema);
+module.exports = mongoose.model("Posts", postsSchema);

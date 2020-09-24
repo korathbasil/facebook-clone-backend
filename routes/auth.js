@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 // const dotenv = require("dotenv");
-const User = require("../model/Users.js");
+const Users = require("../model/Users.js");
 const { signupSchema, loginSchema } = require("../util/validation");
 
 // dotenv.config();
@@ -14,17 +14,19 @@ router.put("/signup", async (req, res) => {
   if (error) {
     return res.status(400).send(error);
   }
-  const userExists = await User.findOne({ email: req.body.email });
+  const userExists = await Users.findOne({ email: req.body.email });
   if (userExists) return res.send("email already exists");
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  const user = new User({
-    email: req.body.email,
-    password: hashedPassword,
-    displayName: req.body.displayname,
-  });
   try {
-    const savedUser = await user.save();
-    res.send(savedUser._id);
+    const user = new Users({
+      email: req.body.email,
+      password: hashedPassword,
+      displayName: req.body.displayName,
+      gender: req.body.gender,
+    });
+
+    const saveduser = await user.save();
+    return res.status(201).json({ id: saveduser._id });
   } catch {
     (err) => {
       res.status(400).send(err);
@@ -37,7 +39,7 @@ router.post("/login", async (req, res) => {
   if (error) {
     return res.status(400).send(error);
   }
-  const selectedUser = await User.findOne({ email: req.body.email });
+  const selectedUser = await Users.findOne({ email: req.body.email });
   if (!selectedUser) return res.send("user not found");
   const isPasswordValid = await bcrypt.compare(
     req.body.password,
@@ -50,7 +52,7 @@ router.post("/login", async (req, res) => {
     { id: selectedUser._id },
     process.env.ACCESS_TOKEN_SECRET
   );
-  res.header("auth-token", token).send(token);
+  res.header("auth-token", token);
   res.status(201).send("Logged in");
 });
 
