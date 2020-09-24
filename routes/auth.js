@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 // const dotenv = require("dotenv");
-const User = require("../model/Users");
+const User = require("../model/Users.js");
 const { signupSchema, loginSchema } = require("../util/validation");
 
 // dotenv.config();

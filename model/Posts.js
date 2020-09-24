@@ -10,4 +10,4 @@ const potsSchema = mongoose.Schema({
   sharesCount: Number,
 });
 
-module.exports = mongoose.model("posts", potsSchema);
+module.exports = mongoose.model("Posts", potsSchema);
