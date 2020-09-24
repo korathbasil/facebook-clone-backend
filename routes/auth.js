@@ -1,11 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-// const dotenv = require("dotenv");
 const Users = require("../model/Users.js");
 const { signupSchema, loginSchema } = require("../util/validation");
-
-// dotenv.config();
 
 const router = express.Router();
 router.put("/signup", async (req, res) => {

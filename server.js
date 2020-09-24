@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 // const bodyParser = require("body-parser");
 
 // Route imports
@@ -14,7 +15,7 @@ const Users = require("./model/Users.js");
 const app = express();
 PORT = process.env.PORT || 8000;
 dotenv.config();
-
+app.use(cors({ origin: "http://localhost:3000" }));
 // DB config
 mongoose.connect(
   "mongodb+srv://administrator:u9B8dWyYbVU2juGw@cluster0.u5egm.mongodb.net/fbCloneDB?retryWrites=true&w=majority",
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 // });
 
 app.get("/posts", (req, res) => {
+  console.log(req);
   Posts.find({}, (err, data) => {
     if (err) {
       res.status(500).json({ message: err.message });
