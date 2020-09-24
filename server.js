@@ -47,7 +47,6 @@ app.get("/", (req, res) => {
 // });
 
 app.get("/posts", (req, res) => {
-  console.log(req);
   Posts.find({}, (err, data) => {
     if (err) {
       res.status(500).json({ message: err.message });
