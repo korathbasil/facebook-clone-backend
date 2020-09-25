@@ -38,8 +38,18 @@ const postsSchema = mongoose.Schema({
   ],
   comments: [
     {
-      type: mongoose.Types.ObjectId,
-      ref: "Users",
+      commentId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      userId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      displayName: {
+        type: String,
+        required: true,
+      },
     },
   ],
   shares: [

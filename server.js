@@ -10,6 +10,8 @@ const authRoute = require("./routes/auth.js");
 // Model imports
 const Posts = require("./model/Posts.js");
 const Users = require("./model/Users.js");
+const Comments = require("./model/Comments.js");
+const { post } = require("./routes/auth.js");
 
 // App config
 const app = express();
@@ -103,6 +105,7 @@ app.use("/auth", authRoute);
 //   });
 // });
 
+// Like post
 app.post("/post/like", (req, res) => {
   const postId = req.body.postId;
   const action = req.body.like;
@@ -132,6 +135,42 @@ app.post("/post/like", (req, res) => {
     })
     .then((result) => res.send(result))
     .catch((e) => res.status(400).json({ message: e.message }));
+});
+
+// Comment post
+app.post("/post/comment", (req, res) => {
+  const newComment = {
+    postId: req.body.postId,
+    userId: req.body.userId,
+    displayName: req.body.displayName,
+    content: req.body.content,
+  };
+  Comments.create(newComment, async (err, data) => {
+    if (err) {
+      console.log("Helooo");
+      res.status(500).json({ message: err.message });
+    } else {
+      await Posts.findById(data.postId)
+        .then((post) => {
+          post.comments.push({
+            commentId: data._id,
+            userId: data.userId,
+            displayName: data.displayName,
+          });
+          return post.save();
+        })
+        .then((result) =>
+          res.status(201).json({
+            message: "Comment added to post successfully",
+          })
+        )
+        .catch((e) =>
+          res.status(400).json({
+            message: e.message,
+          })
+        );
+    }
+  });
 });
 
 // Server listener
