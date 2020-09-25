@@ -1,11 +1,20 @@
+const { string } = require("@hapi/joi");
 const mongoose = require("mongoose");
 
 const usersSchema = mongoose.Schema({
-  avatar: {
+  profilePicture: {
     type: String,
     default: "",
   },
-  displayName: {
+  coverPicture: {
+    type: String,
+    default: "",
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  surName: {
     type: String,
     required: true,
   },
@@ -22,6 +31,42 @@ const usersSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  address: {
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    ZIP: {
+      type: String,
+    },
+  },
+  DOB: {
+    type: String,
+    required: true,
+  },
+  friends: [
+    {
+      id: {
+        type: mongoose.Types.ObjectId,
+        ref: "Users",
+        required: true,
+      },
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      profilePicture: {
+        type: String,
+        default: "",
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Users", usersSchema);
