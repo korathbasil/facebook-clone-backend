@@ -122,6 +122,10 @@ app.post("/post/like", (req, res) => {
           res.status(400).send("cant dislike, already no like");
         } else {
           post.likesCount = post.likesCount - 1;
+          post.likes.splice(
+            post.likes.findIndex((like) => like.userId === userId),
+            1
+          );
           return post.save();
         }
       }
