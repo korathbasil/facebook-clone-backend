@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-// const cors = require("cors");
+const cors = require("cors");
 // const bodyParser = require("body-parser");
 
 // Route imports
@@ -15,7 +15,7 @@ const Users = require("./model/Users.js");
 const app = express();
 PORT = process.env.PORT || 8000;
 dotenv.config();
-// app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000" }));
 // DB config
 mongoose.connect(
   "mongodb+srv://administrator:u9B8dWyYbVU2juGw@cluster0.u5egm.mongodb.net/fbCloneDB?retryWrites=true&w=majority",
@@ -102,6 +102,33 @@ app.use("/auth", authRoute);
 //     }
 //   });
 // });
+
+app.post("/post/like", (req, res) => {
+  const postId = req.body.postId;
+  const action = req.body.like;
+  const userId = req.body.userId;
+  const displayName = req.body.displayName;
+  Posts.findById(postId)
+    .then(async (post) => {
+      if (action) {
+        post.likesCount = post.likesCount + 1;
+        post.likes.push({
+          userId: userId,
+          displayName: displayName,
+        });
+        return post.save();
+      } else {
+        if (post.likesCount === 0) {
+          res.status(400).send("cant dislike, already no like");
+        } else {
+          post.likesCount = post.likesCount - 1;
+          return post.save();
+        }
+      }
+    })
+    .then((result) => res.send(result))
+    .catch((e) => res.status(400).json({ message: e.message }));
+});
 
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));

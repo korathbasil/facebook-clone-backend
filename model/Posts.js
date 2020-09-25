@@ -26,8 +26,14 @@ const postsSchema = mongoose.Schema({
   },
   likes: [
     {
-      type: mongoose.Types.ObjectId,
-      ref: "Users",
+      userId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      displayName: {
+        type: String,
+        required: true,
+      },
     },
   ],
   comments: [

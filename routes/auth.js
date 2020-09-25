@@ -23,7 +23,7 @@ router.put("/signup", async (req, res) => {
       gender: req.body.gender,
       DOB: req.body.DOB,
     });
-
+    // console.log(user);
     const saveduser = await user.save();
     return res.status(201).json({ id: saveduser._id });
   } catch {
@@ -55,8 +55,9 @@ router.post("/login", async (req, res) => {
   res.header("auth-token", token);
   res.status(201).json({
     email: selectedUser.email,
-    displayName: selectedUser.displayName,
-    avatar: selectedUser.avatar,
+    firstName: selectedUser.firstName,
+    lastname: selectedUser.lastName,
+    profilePicture: selectedUser.profilePicture,
   });
 });
 
