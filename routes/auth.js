@@ -58,6 +58,7 @@ router.post("/login", async (req, res) => {
     firstName: selectedUser.firstName,
     lastname: selectedUser.lastName,
     profilePicture: selectedUser.profilePicture,
+    friends: selectedUser.friends,
   });
 });
 

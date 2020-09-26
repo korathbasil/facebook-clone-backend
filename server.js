@@ -154,8 +154,6 @@ app.post("/post/comment", (req, res) => {
         .then((post) => {
           post.comments.push({
             commentId: data._id,
-            userId: data.userId,
-            displayName: data.displayName,
           });
           return post.save();
         })
