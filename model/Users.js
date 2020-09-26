@@ -67,6 +67,48 @@ const usersSchema = mongoose.Schema({
       },
     },
   ],
+  friendRequestsRecieved: [
+    {
+      id: {
+        type: mongoose.Types.ObjectId,
+        ref: "Users",
+        required: true,
+      },
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      profilePicture: {
+        type: String,
+        default: "",
+      },
+    },
+  ],
+  friendRequestsSent: [
+    {
+      id: {
+        type: mongoose.Types.ObjectId,
+        ref: "Users",
+        required: true,
+      },
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      profilePicture: {
+        type: String,
+        default: "",
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Users", usersSchema);
