@@ -13,6 +13,7 @@ const Users = require("./model/Users.js");
 const Comments = require("./model/Comments.js");
 const FriendRequests = require("./model/FriendRequests");
 const { post } = require("./routes/auth.js");
+const { request } = require("express");
 
 // App config
 const app = express();
@@ -223,7 +224,11 @@ app.put("/user/friendRequest", (req, res) => {
           return { savedTargetUser: savedTargetUser, result: result };
         })
         .then(({ savedTargetUser, result }) => {
-          res.status(201).send("Friend Request sent successfully");
+          if (action) {
+            res.status(201).send("Friend Request sent successfully");
+          } else {
+            res.status(201).send("friend request deleted successfully");
+          }
         })
         .catch((e) => res.status(400).json({ m: e }));
     }
@@ -231,7 +236,67 @@ app.put("/user/friendRequest", (req, res) => {
 });
 
 // Accepting a friend request
-app.post("/user/friendRequest", (req, res) => {});
+app.post("/user/friendRequest", (req, res) => {
+  const requestId = req.body.requestId;
+  const action = req.body.action;
+  let senderid,
+    senderDisplayName,
+    senderProfilePicture,
+    recieverId,
+    recieverDisplayName,
+    recieverProfilePicture;
+  FriendRequests.findById(requestId)
+    .then(async (request) => {
+      senderId = request.senderId;
+      senderDisplayName = request.senderDisplayName;
+      senderProfilePicture = request.senderProfilePicture;
+      recieverId = request.recieverId;
+      recieverDisplayName = request.recieverDisplayName;
+      recieverProfilePicture = request.recieverProfilePicture;
+      return request.remove();
+    })
+    .then((result) => {
+      Users.findById(senderId)
+        .then(async (user) => {
+          user.friendRequestsSent.splice(
+            user.friendRequestsSent.findIndex(
+              (rqst) => rqst.requestid === requestId
+            )
+          );
+          if (action) {
+            user.friends.push({
+              id: recieverId,
+              displayName: recieverDisplayName,
+              profilePicture: recieverProfilePicture,
+            });
+          }
+          return user.save();
+        })
+        .then((result) => console.log(result))
+        .catch((e) => console.log(e));
+      Users.findById(recieverId)
+        .then(async (user) => {
+          user.friendRequestsRecieved.splice(
+            user.friendRequestsSent.findIndex(
+              (rqst) => rqst.requestid === requestId
+            )
+          );
+          if (action) {
+            user.friends.push({
+              id: senderId,
+              displayName: senderDisplayName,
+              profilePicture: senderProfilePicture,
+            });
+          }
+          return user.save();
+        })
+        .then((result) => console.log(result))
+        .catch((e) => console.log(e));
+      return result;
+    })
+    .then((result) => res.status(201).send("Accepted friendRequest"))
+    .catch((e) => res.status(403).send(e));
+});
 
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));

@@ -49,11 +49,7 @@ const usersSchema = mongoose.Schema({
         ref: "Users",
         required: true,
       },
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
+      displayName: {
         type: String,
         required: true,
       },
