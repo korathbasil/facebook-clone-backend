@@ -10,11 +10,7 @@ const usersSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  displayName: {
     type: String,
     required: true,
   },
@@ -69,43 +65,17 @@ const usersSchema = mongoose.Schema({
   ],
   friendRequestsRecieved: [
     {
-      id: {
+      requestId: {
         type: mongoose.Types.ObjectId,
-        ref: "Users",
         required: true,
-      },
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-      profilePicture: {
-        type: String,
-        default: "",
       },
     },
   ],
   friendRequestsSent: [
     {
-      id: {
+      requestId: {
         type: mongoose.Types.ObjectId,
-        ref: "Users",
         required: true,
-      },
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-      profilePicture: {
-        type: String,
-        default: "",
       },
     },
   ],

@@ -16,8 +16,7 @@ router.put("/signup", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   try {
     const user = new Users({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      displayName: req.body.displayName,
       email: req.body.email,
       password: hashedPassword,
       gender: req.body.gender,
@@ -55,8 +54,7 @@ router.post("/login", async (req, res) => {
   res.header("auth-token", token);
   res.status(201).json({
     email: selectedUser.email,
-    firstName: selectedUser.firstName,
-    lastname: selectedUser.lastName,
+    displayName: selectedUser.displayName,
     profilePicture: selectedUser.profilePicture,
     friends: selectedUser.friends,
   });

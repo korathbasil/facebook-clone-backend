@@ -11,6 +11,7 @@ const authRoute = require("./routes/auth.js");
 const Posts = require("./model/Posts.js");
 const Users = require("./model/Users.js");
 const Comments = require("./model/Comments.js");
+const FriendRequests = require("./model/FriendRequests");
 const { post } = require("./routes/auth.js");
 
 // App config
@@ -137,7 +138,7 @@ app.post("/post/like", (req, res) => {
     .catch((e) => res.status(400).json({ message: e.message }));
 });
 
-// Comment post
+// Comment on a post
 app.post("/post/comment", (req, res) => {
   const newComment = {
     postId: req.body.postId,
@@ -171,6 +172,7 @@ app.post("/post/comment", (req, res) => {
   });
 });
 
+// Load comments of a particular post
 app.post("/post/comments", (req, res) => {
   const commentIds = req.body.commentIds;
   Comments.find({ _id: { $in: commentIds } }, (err, data) => {
@@ -184,52 +186,52 @@ app.post("/post/comments", (req, res) => {
 
 // Send friendRequest
 app.put("/user/friendRequest", (req, res) => {
-  const userId = req.body.userId;
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const profilePicture = req.body.profilePicture;
-
-  const targetUserId = req.body.targetUserId;
-  const targetFirstName = req.body.targetFirstName;
-  const targetLastName = req.body.targetLastName;
-  const targetProfilePicture = req.body.targetProfilePicture;
-
-  // Adding to friend request sent list of sending user
-  Users.findById(userId)
-    .then((user) => {
-      // console.log(user);
-      user.friendRequestsSent.push({
-        id: userId,
-        firstName: firstName,
-        lastName: lastName,
-        profilePicture: profilePicture,
-      });
-      return user.save();
-    })
-    .then(async (result) => {
-      const targetUserData = await Users.findById(targetUserId);
-      // console.log(targetUser);
-      return {
-        targetUser: targetUserData,
-        result: result,
-      };
-    })
-    .then(async ({ targetUser, result }) => {
-      // console.log(targetUser);
-      targetUser.friendRequestsRecieved.push({
-        id: targetUserId,
-        firstName: targetFirstName,
-        lastName: targetLastName,
-        profilePicture: targetProfilePicture,
-      });
-      savedTargetUser = await targetUser.save();
-      return { savedTargetUser: savedTargetUser, result: result };
-    })
-    .then(({ savedTargetUser, result }) => {
-      res.status(201).send("Friend Request sent successfully");
-    })
-    .catch((e) => res.status(400).json({ m: e }));
+  const request = {
+    senderId: req.body.userId,
+    senderDisplayName: req.body.displayName,
+    senderProfilePicture: req.body.profilePicture,
+    recieverId: req.body.targetUserId,
+    recieverDisplayName: req.body.targetDisplayName,
+    recieverProfilePicture: req.body.targetProfilePicture,
+  };
+  // Adding request to FriendRequest collection
+  FriendRequests.create(request, (err, data) => {
+    if (err) {
+      res.status(403).json({ message: "failed to send request" });
+    } else {
+      // Adding to friend request sent list of sending user
+      Users.findById(req.body.userId)
+        .then((user) => {
+          user.friendRequestsSent.push({
+            requestId: data._id,
+          });
+          return user.save();
+        })
+        .then(async (result) => {
+          const targetUserData = await Users.findById(req.body.targetUserId);
+          return {
+            targetUser: targetUserData,
+            result: result,
+          };
+        })
+        .then(async ({ targetUser, result }) => {
+          // console.log(targetUser);
+          targetUser.friendRequestsRecieved.push({
+            requestId: data._id,
+          });
+          savedTargetUser = await targetUser.save();
+          return { savedTargetUser: savedTargetUser, result: result };
+        })
+        .then(({ savedTargetUser, result }) => {
+          res.status(201).send("Friend Request sent successfully");
+        })
+        .catch((e) => res.status(400).json({ m: e }));
+    }
+  });
 });
+
+// Accepting a friend request
+app.post("/user/friendRequest", (req, res) => {});
 
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));
