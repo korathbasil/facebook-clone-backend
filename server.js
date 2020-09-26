@@ -182,5 +182,54 @@ app.post("/post/comments", (req, res) => {
   });
 });
 
+// Send friendRequest
+app.put("/user/friendRequest", (req, res) => {
+  const userId = req.body.userId;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const profilePicture = req.body.profilePicture;
+
+  const targetUserId = req.body.targetUserId;
+  const targetFirstName = req.body.targetFirstName;
+  const targetLastName = req.body.targetLastName;
+  const targetProfilePicture = req.body.targetProfilePicture;
+
+  // Adding to friend request sent list of sending user
+  Users.findById(userId)
+    .then((user) => {
+      // console.log(user);
+      user.friendRequestsSent.push({
+        id: userId,
+        firstName: firstName,
+        lastName: lastName,
+        profilePicture: profilePicture,
+      });
+      return user.save();
+    })
+    .then(async (result) => {
+      const targetUserData = await Users.findById(targetUserId);
+      // console.log(targetUser);
+      return {
+        targetUser: targetUserData,
+        result: result,
+      };
+    })
+    .then(async ({ targetUser, result }) => {
+      // console.log(targetUser);
+      targetUser.friendRequestsRecieved.push({
+        id: targetUserId,
+        firstName: targetFirstName,
+        lastName: targetLastName,
+        profilePicture: targetProfilePicture,
+      });
+      savedTargetUser = await targetUser.save();
+      return { savedTargetUser: savedTargetUser, result: result };
+    })
+    .then(({ savedTargetUser, result }) => {
+      res.status(201).send("Friend Request sent successfully");
+    })
+    .catch((e) => res.status(400).json({ m: e }));
+});
+
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));
