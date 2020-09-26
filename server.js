@@ -173,5 +173,16 @@ app.post("/post/comment", (req, res) => {
   });
 });
 
+app.post("/post/comments", (req, res) => {
+  const commentIds = req.body.commentIds;
+  Comments.find({ _id: { $in: commentIds } }, (err, data) => {
+    if (err) {
+      res.status(400).json({ message: err.message });
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
+
 // Server listener
 app.listen(PORT, () => console.log("server started at " + PORT));
