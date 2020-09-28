@@ -92,6 +92,29 @@ app.get("/users", (req, res) => {
   });
 });
 
+app.post("/user", (req, res) => {
+  let displayName, email, gender, DOB;
+  const friends = [];
+  Users.findById(req.body.userId)
+    .then((user) => {
+      displayName = user.displayName;
+      email = user.email;
+      gender = user.gender;
+      DOB = user.DOB;
+      user.friends.forEach((friend) => {
+        friends.push(friend);
+      });
+      res.status(200).json({
+        email: email,
+        displayName: displayName,
+        gender: gender,
+        DOB: DOB,
+        friends: friends,
+      });
+    })
+    .catch((e) => res.status(401).json({ m: e.message }));
+});
+
 app.use("/auth", authRoute);
 
 // // SignUp Route

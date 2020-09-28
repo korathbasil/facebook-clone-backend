@@ -53,6 +53,7 @@ router.post("/login", async (req, res) => {
   );
   res.header("auth-token", token);
   res.status(201).json({
+    token: token,
     email: selectedUser.email,
     displayName: selectedUser.displayName,
     profilePicture: selectedUser.profilePicture,
