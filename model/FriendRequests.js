@@ -5,25 +5,17 @@ const frienRequestsSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  senderDisplayName: {
-    type: String,
+  senderMiniId: {
+    type: mongoose.Types.ObjectId,
     required: true,
-  },
-  senderProfilePicture: {
-    type: String,
-    default: "",
   },
   recieverId: {
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  recieverDisplayName: {
-    type: String,
+  recieverMiniId: {
+    type: mongoose.Types.ObjectId,
     required: true,
-  },
-  recieverProfilePicture: {
-    type: String,
-    default: "",
   },
 });
 

@@ -9,8 +9,8 @@ const commentsSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  displayName: {
-    type: String,
+  miniUserId: {
+    type: mongoose.Types.ObjectId,
     required: true,
   },
   content: {

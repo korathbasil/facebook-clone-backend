@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Users = require("./Users");
 
 const postsSchema = mongoose.Schema({
-  author: {
-    avatar: String,
-    displayName: String,
+  authorId: {
+    type: mongoose.Types.ObjectId,
+    rrequired: true,
   },
   caption: {
     type: String,
