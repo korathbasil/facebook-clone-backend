@@ -117,19 +117,6 @@ app.post("/user", (req, res) => {
 
 app.use("/auth", authRoute);
 
-// // SignUp Route
-// app.post("/signup", (req, res) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   Users.create({ email: email, password: password }, (err, data) => {
-//     if (err) {
-//       res.status(500).send(err);
-//     } else {
-//       res.status(201).send(data);
-//     }
-//   });
-// });
-
 // Like post
 app.post("/post/like", (req, res) => {
   const postId = req.body.postId;

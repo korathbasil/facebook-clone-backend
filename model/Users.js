@@ -42,6 +42,14 @@ const usersSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  photos: [
+    {
+      source: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   friends: [
     {
       id: {

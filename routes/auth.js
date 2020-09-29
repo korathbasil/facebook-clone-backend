@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("../model/Users.js");
+const MiniUsers = require("../model/MiniUser");
 const { signupSchema, loginSchema } = require("../util/validation");
 
 const router = express.Router();
@@ -24,6 +25,12 @@ router.put("/signup", async (req, res) => {
     });
     // console.log(user);
     const saveduser = await user.save();
+    const miniUser = new MiniUsers({
+      userId: saveduser._id,
+      displayName: saveduser.displayName,
+      profilePicture: saveduser.profilePicture,
+    });
+    const savedMiniUser = await miniUser.save();
     return res.status(201).json({ id: saveduser._id });
   } catch {
     (err) => {
