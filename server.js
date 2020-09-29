@@ -1,11 +1,14 @@
 const http = require("http");
 const path = require("path");
+const os = require("os");
+const fs = require("fs");
 const express = require("express");
 const mongoose = require("mongoose");
 const socketIo = require("socket.io");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const { Storage } = require("@google-cloud/storage");
+const multer = require("multer");
 
 // Route imports
 const authRoute = require("./routes/auth");
@@ -24,7 +27,7 @@ const gc = new Storage({
   projectId: "facebook-clone-291012",
 });
 
-gc.getBuckets().then((buckets) => console.log(buckets));
+// gc.getBuckets().then((buckets) => console.log(buckets));
 const imageBucket = gc.bucket("fb-clone-images");
 
 // DB config
@@ -44,6 +47,7 @@ io.on("connection", (socket) => {
 });
 
 // Middlewares
+app.use(multer().single("image"));
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000" }));
 
@@ -61,6 +65,34 @@ app.post("/post", postRoute);
 
 //  User Route
 app.put("/user", userRoute);
+
+// Testing
+app.post("/testFile", (req, res) => {
+  const BusBoy = require("busboy");
+  const busboy = new BusBoy({ headers: req.headers });
+  let imageFileName;
+  imageToBeUploaded = {};
+  busboy.on("file", (fieldName, file, fileName, encoding, mimetype) => {
+    const imageExtension = fileName.split(".")[fileName.split(".").length - 1];
+    imageFileName = `${Math.round(Math.random() * 1000000)}.${imageExtension}`;
+    const filePath = path.join(os.tmpdir(), imageFileName);
+    imageToBeUploaded = { filePath, mimetype };
+    file.pipe(fs.createWriteStream(filePath));
+  });
+  busboy.on("finish", () => {
+    imageBucket.upload(imageToBeUploaded.filePath.toString(), {
+      resumable: false,
+    });
+  });
+  busboy.end(req.rawBody);
+  // imageBucket
+  //   .file(req.file.originalname)
+  //   .createWriteStream({
+  //     resumable: false,
+  //     gzip: true,
+  //   })
+  //   .then(() => res.send("Image Uploaded"));
+});
 
 // Server listener
 server.listen(PORT, () => console.log("server started at " + PORT));
