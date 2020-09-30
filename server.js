@@ -9,12 +9,15 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const { Storage } = require("@google-cloud/storage");
 const multer = require("multer");
+const fileUpload = require("express-fileupload");
+const streamifier = require("streamifier");
 
 // Route imports
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const userRoute = require("./routes/user");
 const { pathToFileURL } = require("url");
+const { Buffer } = require("buffer");
 
 // App config
 const app = express();
@@ -47,7 +50,8 @@ io.on("connection", (socket) => {
 });
 
 // Middlewares
-app.use(multer().single("image"));
+// app.use(multer().single("image"));
+app.use(fileUpload());
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000" }));
 
@@ -67,31 +71,48 @@ app.post("/post", postRoute);
 app.put("/user", userRoute);
 
 // Testing
-app.post("/testFile", (req, res) => {
-  const BusBoy = require("busboy");
-  const busboy = new BusBoy({ headers: req.headers });
-  let imageFileName;
-  imageToBeUploaded = {};
-  busboy.on("file", (fieldName, file, fileName, encoding, mimetype) => {
-    const imageExtension = fileName.split(".")[fileName.split(".").length - 1];
-    imageFileName = `${Math.round(Math.random() * 1000000)}.${imageExtension}`;
-    const filePath = path.join(os.tmpdir(), imageFileName);
-    imageToBeUploaded = { filePath, mimetype };
-    file.pipe(fs.createWriteStream(filePath));
-  });
-  busboy.on("finish", () => {
-    imageBucket.upload(imageToBeUploaded.filePath.toString(), {
+// app.post("/testFile", (req, res) => {
+//   const BusBoy = require("busboy");
+//   const busboy = new BusBoy({ headers: req.headers });
+//   let imageFileName;
+//   imageToBeUploaded = {};
+//   busboy.on("file", (fieldName, file, fileName, encoding, mimetype) => {
+//     const imageExtension = fileName.split(".")[fileName.split(".").length - 1];
+//     imageFileName = `${Math.round(Math.random() * 1000000)}.${imageExtension}`;
+//     const filePath = path.join(os.tmpdir(), imageFileName);
+//     imageToBeUploaded = { filePath, mimetype };
+//     file.pipe(fs.createWriteStream(filePath));
+//   });
+//   busboy.on("finish", () => {
+//     imageBucket.upload(imageToBeUploaded.filePath, {
+//       resumable: false,
+//     });
+//   });
+//   busboy.end(req.rawBody);
+//   // imageBucket
+//   //   .file(req.file.originalname)
+//   //   .createWriteStream({
+//   //     resumable: false,
+//   //     gzip: true,
+//   //   })
+//   //   .then(() => res.send("Image Uploaded"));
+// });
+
+app.post("/testFile", async (req, res) => {
+  const file = req.files.image;
+  streamifier.createReadStream(new Buffer(file.data)).pipe(
+    imageBucket.file(file.name).createWriteStream({
       resumable: false,
-    });
-  });
-  busboy.end(req.rawBody);
-  // imageBucket
-  //   .file(req.file.originalname)
-  //   .createWriteStream({
-  //     resumable: false,
-  //     gzip: true,
-  //   })
-  //   .then(() => res.send("Image Uploaded"));
+      gzip: true,
+    })
+  );
+  // // const { createReadStream, filename } = await file;
+  // createReadStream(file).pipe(
+
+  //     .catch((e) => console.log(e))
+  // );
+  // console.log(file.data);
+  res.send(file);
 });
 
 // Server listener
