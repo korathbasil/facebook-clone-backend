@@ -4,7 +4,11 @@ const Users = require("./Users");
 const postsSchema = mongoose.Schema({
   authorId: {
     type: mongoose.Types.ObjectId,
-    rrequired: true,
+    required: true,
+  },
+  miniAuthorId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
   },
   caption: {
     type: String,

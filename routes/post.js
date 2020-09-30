@@ -1,9 +1,11 @@
 const express = require("express");
+const { Buffer } = require("buffer");
+const streamifier = require("streamifier");
+const imageBucket = require("../util/GCPbucket");
 
 // Model imports
 const Posts = require("../model/Posts");
 const Comments = require("../model/Comments");
-
 const router = express.Router();
 
 // Fetch all posts
@@ -19,7 +21,23 @@ router.get("/getAll", (req, res) => {
 
 // Uploading a post
 router.post("/upload", (req, res) => {
-  const post = req.body;
+  const file = req.files.image;
+  const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
+  const fileName = new Date().toISOString();
+  const post = {
+    authorId: req.body.userId,
+    miniAuthorId: req.body.miniUserId,
+    caption: req.body.caption,
+  };
+  streamifier.createReadStream(new Buffer(file.data)).pipe(
+    imageBucket
+      .file(`normalUploads/${fileName}.${fileExtension}`)
+      .createWriteStream({
+        resumable: false,
+        gzip: true,
+      })
+  );
+  post.image = `https://storage.googleapis.com/fb-clone-images/normalUploads/${fileName}.${fileExtension}`;
   Posts.create(post, (err, data) => {
     if (err) {
       res.status(500).send(err);
