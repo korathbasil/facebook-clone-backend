@@ -101,7 +101,7 @@ app.put("/user", userRoute);
 app.post("/testFile", async (req, res) => {
   const file = req.files.image;
   streamifier.createReadStream(new Buffer(file.data)).pipe(
-    imageBucket.file(file.name).createWriteStream({
+    imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
       resumable: false,
       gzip: true,
     })
