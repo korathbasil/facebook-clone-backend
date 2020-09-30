@@ -17,11 +17,10 @@ const albumSchema = mongoose.Schema({
   latestPhoto: {
     photoId: {
       type: mongoose.Types.ObjectId,
-      default: true,
     },
     imageUrl: {
       type: String,
-      default: true,
+      default: "",
     },
   },
   photos: [

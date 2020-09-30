@@ -27,14 +27,38 @@ router.put("/signup", async (req, res) => {
       DOB: req.body.DOB,
     });
     // console.log(user);
-    const saveduser = await user.save();
+    const savedUser = await user.save();
     const miniUser = new MiniUsers({
-      userId: saveduser._id,
-      displayName: saveduser.displayName,
-      profilePicture: saveduser.profilePicture,
+      userId: savedUser._id,
+      displayName: savedUser.displayName,
+      profilePicture: savedUser.profilePicture,
     });
     const savedMiniUser = await miniUser.save();
-    return res.status(201).json({ id: saveduser._id });
+    const albumsArray = ["Profile Pictures", "Cover Photos", "Mobile Uploads"];
+    albumsArray.forEach((album) => {
+      let newAlbum = {
+        userId: savedUser._id,
+        miniUserId: savedMiniUser._id,
+        albumName: album,
+      };
+      Albums.create(newAlbum, (err, data) => {
+        if (err) {
+          console.log(err);
+        } else {
+          Users.findById(savedUser._id)
+            .then((user) => {
+              user.albums.push({
+                albumId: data._id,
+                albumName: data.albumName,
+              });
+              return user.save();
+            })
+            .then((result) => console.log(result))
+            .catch((e) => console.log(e));
+        }
+      });
+    });
+    return res.status(201).json({ id: savedUser._id });
   } catch {
     (err) => {
       res.status(400).send(err);
