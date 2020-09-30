@@ -58,9 +58,25 @@ const usersSchema = mongoose.Schema({
       },
     },
   ],
-  photos: [
+  recentNinePhotos: [
     {
-      source: {
+      photoId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      imageUrl: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  albums: [
+    {
+      albumId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      albumName: {
         type: String,
         required: true,
       },

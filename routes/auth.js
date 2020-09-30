@@ -1,9 +1,12 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { signupSchema, loginSchema } = require("../util/validation");
+
+// Model imports
 const Users = require("../model/Users.js");
 const MiniUsers = require("../model/MiniUser");
-const { signupSchema, loginSchema } = require("../util/validation");
+const Albums = require("../model/Album");
 
 const router = express.Router();
 router.put("/signup", async (req, res) => {
