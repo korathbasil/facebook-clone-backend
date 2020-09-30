@@ -34,11 +34,9 @@ router.post("/getDetails", (req, res) => {
 router.put("/friendRequest", (req, res) => {
   const request = {
     senderId: req.body.userId,
-    senderDisplayName: req.body.displayName,
-    senderProfilePicture: req.body.profilePicture,
+    senderMiniId: req.body.miniUserId,
     recieverId: req.body.targetUserId,
-    recieverDisplayName: req.body.targetDisplayName,
-    recieverProfilePicture: req.body.targetProfilePicture,
+    recieverMiniId: req.body.targetUserMiniId,
   };
   // Adding request to FriendRequest collection
   FriendRequests.create(request, (err, data) => {

@@ -42,6 +42,22 @@ const usersSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  posts: [
+    {
+      postId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+    },
+  ],
+  feed: [
+    {
+      postId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+    },
+  ],
   photos: [
     {
       source: {
@@ -57,13 +73,10 @@ const usersSchema = mongoose.Schema({
         ref: "Users",
         required: true,
       },
-      displayName: {
-        type: String,
+      miniUserId: {
+        type: mongoose.Types.ObjectId,
+        ref: "MiniUsers",
         required: true,
-      },
-      profilePicture: {
-        type: String,
-        default: "",
       },
     },
   ],

@@ -6,6 +6,7 @@ const imageBucket = require("../util/GCPbucket");
 // Model imports
 const Posts = require("../model/Posts");
 const Comments = require("../model/Comments");
+const Users = require("../model/Users");
 const router = express.Router();
 
 // Fetch all posts
@@ -42,7 +43,29 @@ router.post("/upload", (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.status(201).send(data);
+      Users.findById(data.authorId)
+        .then((user) => {
+          user.posts.push({
+            postId: data._id,
+          });
+          user.feed.push({
+            postId: data._id,
+          });
+          user.friends.forEach((friend) => {
+            Users.findById(friend.id)
+              .then((selectedFriend) => {
+                selectedFriend.feed.push({
+                  postId: data._id,
+                });
+              })
+              .catch((e) => console.log(e));
+          });
+          return user.save();
+        })
+        .then((result) => {
+          res.status(201).json({ result: result, data: data });
+        })
+        .catch((e) => res.status(401).send(e));
     }
   });
 });
