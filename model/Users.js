@@ -70,12 +70,10 @@ const usersSchema = mongoose.Schema({
     {
       id: {
         type: mongoose.Types.ObjectId,
-        ref: "Users",
         required: true,
       },
       miniUserId: {
         type: mongoose.Types.ObjectId,
-        ref: "MiniUsers",
         required: true,
       },
     },

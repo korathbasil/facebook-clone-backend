@@ -82,20 +82,15 @@ router.put("/friendRequest", (req, res) => {
 router.post("/friendRequest", (req, res) => {
   const requestId = req.body.requestId;
   const action = req.body.action;
-  let senderid,
-    senderDisplayName,
-    senderProfilePicture,
-    recieverId,
-    recieverDisplayName,
-    recieverProfilePicture;
+  let senderId, senderMiniId, recieverId, recieverMiniId;
   FriendRequests.findById(requestId)
     .then(async (request) => {
       senderId = request.senderId;
-      senderDisplayName = request.senderDisplayName;
-      senderProfilePicture = request.senderProfilePicture;
       recieverId = request.recieverId;
-      recieverDisplayName = request.recieverDisplayName;
-      recieverProfilePicture = request.recieverProfilePicture;
+      senderMiniId = request.senderMiniId;
+      recieverMiniId = request.recieverMiniId;
+      // console.log(senderId);
+      // console.log(recieverId);
       return request.remove();
     })
     .then((result) => {
@@ -103,14 +98,13 @@ router.post("/friendRequest", (req, res) => {
         .then(async (user) => {
           user.friendRequestsSent.splice(
             user.friendRequestsSent.findIndex(
-              (rqst) => rqst.requestid === requestId
+              (rqst) => rqst.requestId === requestId
             )
           );
           if (action) {
             user.friends.push({
               id: recieverId,
-              displayName: recieverDisplayName,
-              profilePicture: recieverProfilePicture,
+              miniUserId: recieverMiniId,
             });
           }
           return user.save();
@@ -121,14 +115,13 @@ router.post("/friendRequest", (req, res) => {
         .then(async (user) => {
           user.friendRequestsRecieved.splice(
             user.friendRequestsSent.findIndex(
-              (rqst) => rqst.requestid === requestId
+              (rqst) => rqst.requestId === requestId
             )
           );
           if (action) {
             user.friends.push({
               id: senderId,
-              displayName: senderDisplayName,
-              profilePicture: senderProfilePicture,
+              miniUserId: senderMiniId,
             });
           }
           return user.save();
