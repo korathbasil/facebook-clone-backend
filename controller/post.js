@@ -48,7 +48,7 @@ module.exports = {
         console.log(err);
       } else {
         variantImageUrl = data.imageUrl;
-        variantPictureId = data._id;
+        variantImageId = data._id;
         Albums.findById(albumId).then((album) => {
           album.latestPhoto = {
             photoId: data._id,
@@ -92,6 +92,7 @@ module.exports = {
                 user.feed.push({
                   postId: data._id,
                 });
+                console.log(user.friends);
                 user.friends.forEach((friend) => {
                   Users.findById(friend.id)
                     .then((selectedFriend) => {
