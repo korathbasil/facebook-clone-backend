@@ -13,13 +13,6 @@ const photoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  albumId: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-  },
-  postId: {
-    type: mongoose.Types.ObjectId,
-  },
 });
 
 module.exports = mongoose.model("Photos", photoSchema);
