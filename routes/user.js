@@ -1,4 +1,7 @@
 const express = require("express");
+const { Buffer } = require("buffer");
+const streamifier = require("streamifier");
+const imageBucket = require("../util/GCPbucket");
 
 // Model imports
 const Users = require("../model/Users");
@@ -132,6 +135,22 @@ router.post("/friendRequest", (req, res) => {
     })
     .then((result) => res.status(201).send("Accepted friendRequest"))
     .catch((e) => res.status(403).send(e));
+});
+
+router.post("/profilePicture", (req, res) => {
+  const file = req.files.image;
+  const userId = req.body.userId;
+  const fileName = new Date().toISOString();
+  const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
+  streamifier.createReadStream(new Buffer(file.data)).pipe(
+    imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
+      resumable: false,
+      gzip: true,
+    })
+  );
+  Users.findById(userId).then((user) => {
+    user.profilePicture = `https://storage.googleapis.com/fb-clone-images/profilePictures/${fileName}.${fileExtension}`;
+  });
 });
 
 module.exports = router;

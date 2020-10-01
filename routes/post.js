@@ -32,13 +32,13 @@ router.post("/upload", (req, res) => {
   };
   streamifier.createReadStream(new Buffer(file.data)).pipe(
     imageBucket
-      .file(`normalUploads/${fileName}.${fileExtension}`)
+      .file(`mobileUploads/${fileName}.${fileExtension}`)
       .createWriteStream({
         resumable: false,
         gzip: true,
       })
   );
-  post.image = `https://storage.googleapis.com/fb-clone-images/normalUploads/${fileName}.${fileExtension}`;
+  post.image = `https://storage.googleapis.com/fb-clone-images/mobileUploads/${fileName}.${fileExtension}`;
   Posts.create(post, (err, data) => {
     if (err) {
       res.status(500).send(err);
