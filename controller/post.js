@@ -92,13 +92,15 @@ module.exports = {
                 user.feed.push({
                   postId: data._id,
                 });
-                console.log(user.friends);
+
                 user.friends.forEach((friend) => {
                   Users.findById(friend.id)
                     .then((selectedFriend) => {
+                      console.log(selectedFriend);
                       selectedFriend.feed.push({
                         postId: data._id,
                       });
+                      selectedFriend.save();
                     })
                     .catch((e) => console.log(e));
                 });
