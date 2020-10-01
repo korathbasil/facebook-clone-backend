@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const photoSchema = mongoose.Schema({
-  userid: {
+  userId: {
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  miniUserid: {
+  miniUserId: {
     type: mongoose.Types.ObjectId,
     required: true,
   },
@@ -16,6 +16,9 @@ const photoSchema = mongoose.Schema({
   albumId: {
     type: mongoose.Types.ObjectId,
     required: true,
+  },
+  postId: {
+    type: mongoose.Types.ObjectId,
   },
 });
 

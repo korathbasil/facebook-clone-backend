@@ -3,8 +3,13 @@ const mongoose = require("mongoose");
 
 const usersSchema = mongoose.Schema({
   profilePicture: {
-    type: String,
-    default: "",
+    profilePictureUrl: {
+      type: String,
+      default: "",
+    },
+    imageId: {
+      type: mongoose.Types.ObjectId,
+    },
   },
   coverPicture: {
     type: String,
