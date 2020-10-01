@@ -11,10 +11,11 @@ const Posts = require("../model/Posts");
 module.exports = {
   uploadPost: (req, res) => {
     const variant = req.body.variant;
+    const altVariant = req.body.altVariant;
     const file = req.files.image;
     const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
     const fileName = new Date().toISOString();
-    let albumId, postId;
+    let albumId, postId, variantPictureId, variantImageUrl;
 
     streamifier.createReadStream(new Buffer(file.data)).pipe(
       imageBucket
@@ -30,13 +31,15 @@ module.exports = {
       //       return album.albumId;
       //     }
       //   });
-      let index = user.albums.findIndex((album) => album.albumName === variant);
+      let index = user.albums.findIndex(
+        (album) => album.albumName === altVariant
+      );
       albumId = user.albums[index].albumId;
       user.save();
     });
     const newImage = {
-      authorId: req.body.userId,
-      miniAuthorId: req.body.miniUserId,
+      userId: req.body.userId,
+      miniUserId: req.body.miniUserId,
       imageUrl: `https://storage.googleapis.com/fb-clone-images/${variant}/${fileName}.${fileExtension}`,
       albumId: albumId,
     };
@@ -44,6 +47,8 @@ module.exports = {
       if (err) {
         console.log(err);
       } else {
+        variantImageUrl = data.imageUrl;
+        variantPictureId = data._id;
         Albums.findById(albumId).then((album) => {
           album.latestPhoto = {
             photoId: data._id,
@@ -71,6 +76,16 @@ module.exports = {
           } else {
             Users.findById(data.authorId)
               .then((user) => {
+                if (variant === "profilePictures") {
+                  user.profilePicture = {
+                    profilePictureUrl: variantImageUrl,
+                    imageId: variantImageId,
+                  };
+                }
+                if (variant === "coverPictures") {
+                  user.coverPicture = variantImageUrl;
+                }
+
                 user.posts.push({
                   postId: data._id,
                 });
