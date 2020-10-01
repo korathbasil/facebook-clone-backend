@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Users = require("./Users");
 
 const postsSchema = mongoose.Schema({
+  variant: {
+    type: String,
+    required: true,
+  },
   authorId: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -13,9 +17,19 @@ const postsSchema = mongoose.Schema({
   caption: {
     type: String,
   },
-  image: {
-    type: String,
+  album: {
+    albumId: {
+      type: mongoose.Types.ObjectId,
+    },
+    albumName: {
+      type: String,
+    },
   },
+  images: [
+    {
+      photoId: mongoose.Types.ObjectId,
+    },
+  ],
   likesCount: {
     type: Number,
     default: 0,
