@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { signupSchema, loginSchema } = require("../util/validation");
+const verifyToken = require("../util/verifyToken");
 
 // Model imports
 const Users = require("../model/Users.js");
@@ -77,7 +78,6 @@ router.post("/login", async (req, res) => {
     req.body.password,
     selectedUser.password
   );
-
   //   Create and assign token
   if (!isPasswordValid)
     return res.status(400).json({ message: "Incorrect password" });
@@ -93,6 +93,26 @@ router.post("/login", async (req, res) => {
     profilePicture: selectedUser.profilePicture,
     friends: selectedUser.friends,
   });
+});
+
+router.get("/validate", verifyToken, (req, res) => {
+  if (req.userId) {
+    Users.findById(req.userId)
+      .then((user) => {
+        console.log(user);
+        const loggedUser = {
+          email: user.email,
+          displayName: user.displayName,
+          profilePicture: user.profilePicture,
+          friends: user.friends,
+        };
+        return user.save();
+      })
+      .then((result) => {
+        res.status(200).send(loggedUser);
+      })
+      .catch((e) => res.status(402).send(e));
+  }
 });
 
 module.exports = router;
