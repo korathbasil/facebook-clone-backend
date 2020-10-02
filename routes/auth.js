@@ -99,17 +99,16 @@ router.get("/validate", verifyToken, (req, res) => {
   if (req.userId) {
     Users.findById(req.userId)
       .then((user) => {
-        console.log(user);
         const loggedUser = {
           email: user.email,
           displayName: user.displayName,
           profilePicture: user.profilePicture,
           friends: user.friends,
         };
-        return user.save();
+        return loggedUser;
       })
-      .then((result) => {
-        res.status(200).send(loggedUser);
+      .then((user) => {
+        res.status(200).send(user);
       })
       .catch((e) => res.status(402).send(e));
   }
