@@ -2,6 +2,7 @@ const express = require("express");
 const { Buffer } = require("buffer");
 const streamifier = require("streamifier");
 const imageBucket = require("../util/GCPbucket");
+const verifyToken = require("../util/verifyToken");
 
 // Model imports
 const Users = require("../model/Users");
@@ -11,6 +12,7 @@ const Posts = require("../model/Posts");
 
 // Controller imports
 const { uploadPost } = require("../controller/post");
+const { getRequestInterceptors } = require("../util/GCPbucket");
 
 const router = express.Router();
 
@@ -170,5 +172,18 @@ router.post("/friendRequest", (req, res) => {
 // });
 
 router.post("/profilePicture", uploadPost);
+
+router.get("/getFeed", verifyToken, (req, res) => {
+  let posts = [];
+  Users.findById(req.userId).then((user) => {
+    console.log(user.feed);
+    user.feed.forEach((item) => {
+      Posts.findById(item.postId).then((post) => {
+        posts.push(post);
+        res.status(200).send(posts);
+      });
+    });
+  });
+});
 
 module.exports = router;

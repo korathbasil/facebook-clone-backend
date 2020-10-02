@@ -100,6 +100,7 @@ router.get("/validate", verifyToken, (req, res) => {
     Users.findById(req.userId)
       .then((user) => {
         const loggedUser = {
+          userId: req.userId,
           email: user.email,
           displayName: user.displayName,
           profilePicture: user.profilePicture,
