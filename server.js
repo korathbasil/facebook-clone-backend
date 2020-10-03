@@ -9,6 +9,7 @@ const { Storage } = require("@google-cloud/storage");
 const fileUpload = require("express-fileupload");
 const streamifier = require("streamifier");
 const { Buffer } = require("buffer");
+const getUser = require("./controller/user/getUser");
 
 // Route imports
 const authRoute = require("./routes/auth");
@@ -44,6 +45,8 @@ mongoose.connect(
 io.on("connection", (socket) => {
   console.log(" user connected");
 });
+
+getUser("5f75e69bd0a0a930b9d64feb");
 
 // Middlewares
 app.use(fileUpload());
