@@ -12,7 +12,6 @@ const Posts = require("../model/Posts");
 
 // Controller imports
 const { uploadPost } = require("../controller/post");
-const { getRequestInterceptors } = require("../util/GCPbucket");
 
 const router = express.Router();
 
