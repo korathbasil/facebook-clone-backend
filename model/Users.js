@@ -49,18 +49,12 @@ const usersSchema = mongoose.Schema({
   },
   posts: [
     {
-      postId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
+      type: mongoose.Types.ObjectId,
     },
   ],
   feed: [
     {
-      postId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
+      type: mongoose.Types.ObjectId,
     },
   ],
   recentNinePhotos: [

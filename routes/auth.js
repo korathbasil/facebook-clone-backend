@@ -107,6 +107,7 @@ router.get("/validate", verifyToken, (req, res) => {
           friends: user.friends,
         };
         return loggedUser;
+        // clg(user);
       })
       .then((user) => {
         res.status(200).send(user);

@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
   console.log(" user connected");
 });
 
-getUser("5f75e69bd0a0a930b9d64feb");
+// getUser("5f75e69bd0a0a930b9d64feb");
 
 // Middlewares
 app.use(fileUpload());

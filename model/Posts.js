@@ -27,7 +27,7 @@ const postsSchema = mongoose.Schema({
   },
   images: [
     {
-      photoId: mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
     },
   ],
   likesCount: {
