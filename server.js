@@ -1,14 +1,10 @@
 const http = require("http");
-const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const socketIo = require("socket.io");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const { Storage } = require("@google-cloud/storage");
 const fileUpload = require("express-fileupload");
-const streamifier = require("streamifier");
-const { Buffer } = require("buffer");
 const getUser = require("./controller/user/getUser");
 
 // Route imports
@@ -22,13 +18,6 @@ const server = http.createServer(app);
 const io = socketIo(server);
 PORT = process.env.PORT || 8000;
 dotenv.config();
-
-// GCP config
-const gc = new Storage({
-  keyFilename: path.join(__dirname, "facebook-clone-291012-cc3214523360.json"),
-  projectId: "facebook-clone-291012",
-});
-const imageBucket = gc.bucket("fb-clone-images");
 
 // DB config
 mongoose.connect(
@@ -70,17 +59,17 @@ app.use("/user", userRoute);
 
 // Test file upload => SUCCESS
 
-app.post("/testFile", async (req, res) => {
-  const file = req.files.image;
-  console.log(req.files, req.body);
-  streamifier.createReadStream(new Buffer(file.data)).pipe(
-    imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
-      resumable: false,
-      gzip: true,
-    })
-  );
-  res.send(file);
-});
+// app.post("/testFile", async (req, res) => {
+//   const file = req.files.image;
+//   console.log(req.files, req.body);
+//   streamifier.createReadStream(new Buffer(file.data)).pipe(
+//     imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
+//       resumable: false,
+//       gzip: true,
+//     })
+//   );
+//   res.send(file);
+// });
 
 // Server listener
 server.listen(PORT, () => console.log("server started at " + PORT));
