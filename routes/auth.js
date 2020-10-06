@@ -9,7 +9,7 @@ const router = express.Router();
 router.put("/signup", authentication.signup);
 // Login route
 router.post("/login", authentication.login);
-// User valodation route which send back the authorized user
+// User validation route which sends back the authorized user
 router.get("/validate", verifyToken, authorization.validateUser);
 
 module.exports = router;
