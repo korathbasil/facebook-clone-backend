@@ -1,13 +1,8 @@
 const express = require("express");
-const { Buffer } = require("buffer");
-const streamifier = require("streamifier");
-const imageBucket = require("../util/GCPbucket");
 const verifyToken = require("../util/verifyToken");
 
 // Model imports
 const Users = require("../model/Users");
-const FriendRequests = require("../model/FriendRequests");
-const Photos = require("../model/Photo");
 const Posts = require("../model/Posts");
 
 // Controller imports
@@ -45,10 +40,10 @@ router.post("/getDetails", (req, res) => {
 
 // Sending a friend request
 router.put("/friendRequest", sendRequest);
-
 // Accepting or rejecting a friend request
 router.post("/friendRequest", acceptRequest);
 
+// Uploading a profile picture
 router.post("/profilePicture", uploadPost);
 
 router.get("/getFeed", verifyToken, (req, res) => {

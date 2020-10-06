@@ -1,4 +1,5 @@
 // Model imports
+const FriendRequests = require("../../model/FriendRequests");
 
 module.exports = {
   sendRequest: (req, res) => {
