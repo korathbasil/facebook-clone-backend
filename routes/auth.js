@@ -1,15 +1,15 @@
 const express = require("express");
 const verifyToken = require("../util/verifyToken");
-const authentication = require("../controller/auth/authentication");
-const authorization = require("../controller/auth/authorization");
+const { signup, login } = require("../controller/auth/authentication");
+const { validateUser } = require("../controller/auth/authorization");
 
 const router = express.Router();
 
 // Signup route
-router.put("/signup", authentication.signup);
+router.put("/signup", signup);
 // Login route
-router.post("/login", authentication.login);
+router.post("/login", login);
 // User validation route which sends back the authorized user
-router.get("/validate", verifyToken, authorization.validateUser);
+router.get("/validate", verifyToken, validateUser);
 
 module.exports = router;

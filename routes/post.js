@@ -1,13 +1,15 @@
 const express = require("express");
 
+const router = express.Router();
+
 // Model imports
 const Posts = require("../model/Posts");
 const Comments = require("../model/Comments");
-const Users = require("../model/Users");
-const router = express.Router();
 
 // Controller imports
 const { uploadPost } = require("../controller/post");
+const { likePost } = require("../controller/post/likePost");
+const { commentPost } = require("../controller/post/commentPost");
 
 // Fetch all posts
 router.get("/getAll", (req, res) => {
@@ -22,72 +24,10 @@ router.get("/getAll", (req, res) => {
 
 // Uploading a post
 router.post("/upload", uploadPost);
-
 // Like or dislike a post
-router.post("/like", (req, res) => {
-  const postId = req.body.postId;
-  const action = req.body.like;
-  const userId = req.body.userId;
-  const displayName = req.body.displayName;
-  Posts.findById(postId)
-    .then(async (post) => {
-      if (action) {
-        post.likesCount = post.likesCount + 1;
-        post.likes.push({
-          userId: userId,
-          displayName: displayName,
-        });
-        return post.save();
-      } else {
-        if (post.likesCount === 0) {
-          res.status(400).send("cant dislike, already no like");
-        } else {
-          post.likesCount = post.likesCount - 1;
-          post.likes.splice(
-            post.likes.findIndex((like) => like.userId === userId),
-            1
-          );
-          return post.save();
-        }
-      }
-    })
-    .then((result) => res.send(result))
-    .catch((e) => res.status(400).json({ message: e.message }));
-});
-
+router.post("/like", likePost);
 // Comment on a post
-router.post("/comment", (req, res) => {
-  const newComment = {
-    postId: req.body.postId,
-    userId: req.body.userId,
-    displayName: req.body.displayName,
-    content: req.body.content,
-  };
-  Comments.create(newComment, async (err, data) => {
-    if (err) {
-      console.log("Helooo");
-      res.status(500).json({ message: err.message });
-    } else {
-      await Posts.findById(data.postId)
-        .then((post) => {
-          post.comments.push({
-            commentId: data._id,
-          });
-          return post.save();
-        })
-        .then((result) =>
-          res.status(201).json({
-            message: "Comment added to post successfully",
-          })
-        )
-        .catch((e) =>
-          res.status(400).json({
-            message: e.message,
-          })
-        );
-    }
-  });
-});
+router.post("/comment", commentPost);
 
 // Load comments on a particular post
 router.post("/comments", (req, res) => {
