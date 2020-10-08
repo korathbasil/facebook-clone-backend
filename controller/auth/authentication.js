@@ -50,10 +50,7 @@ module.exports = {
           } else {
             Users.findById(savedUser._id)
               .then((user) => {
-                user.albums.push({
-                  albumId: data._id,
-                  albumName: data.albumName,
-                });
+                user.albums.push(data._id);
                 return user.save();
               })
               .then((result) => console.log(result))
@@ -68,10 +65,11 @@ module.exports = {
       };
     }
   },
+
   login: async (req, res) => {
     const { error } = loginSchema.validate(req.body);
     if (error) {
-      return res.status(400).send(error);
+      return res.status(400).send(error.details[0].message);
     }
     const selectedUser = await Users.findOne({ email: req.body.email });
     if (!selectedUser) return res.send("user not found");

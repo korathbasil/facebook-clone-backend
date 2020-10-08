@@ -59,4 +59,13 @@ router.get("/getFeed", verifyToken, (req, res) => {
   });
 });
 
+router.get("/getUser", (req, res) => {
+  Users.findById(req.body.userId)
+    .populate("albums")
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((e) => res.send(e));
+});
+
 module.exports = router;

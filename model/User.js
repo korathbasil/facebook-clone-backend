@@ -8,11 +8,18 @@ const userSchema = mongoose.Schema({
     },
     imageId: {
       type: mongoose.Types.ObjectId,
+      ref: "Photo",
     },
   },
   coverPicture: {
-    type: String,
-    default: "",
+    coverPictureUrl: {
+      type: String,
+      default: "",
+    },
+    imageId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Photo",
+    },
   },
   displayName: {
     type: String,
@@ -49,6 +56,7 @@ const userSchema = mongoose.Schema({
   posts: [
     {
       type: mongoose.Types.ObjectId,
+      ref: "Post",
     },
   ],
   feed: [
@@ -70,14 +78,8 @@ const userSchema = mongoose.Schema({
   ],
   albums: [
     {
-      albumId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
-      albumName: {
-        type: String,
-        required: true,
-      },
+      type: mongoose.Types.ObjectId,
+      ref: "Album",
     },
   ],
   friends: [
