@@ -62,6 +62,7 @@ const userSchema = mongoose.Schema({
   feed: [
     {
       type: mongoose.Types.ObjectId,
+      ref: "Post",
     },
   ],
   recentNinePhotos: [

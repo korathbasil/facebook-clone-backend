@@ -7,6 +7,7 @@ const albumSchema = mongoose.Schema({
   },
   miniUserId: {
     type: mongoose.Types.ObjectId,
+    ref: "MiniUser",
     required: true,
   },
   albumName: {
@@ -16,6 +17,7 @@ const albumSchema = mongoose.Schema({
   latestPhoto: {
     photoId: {
       type: mongoose.Types.ObjectId,
+      ref: "Photo",
     },
     imageUrl: {
       type: String,
@@ -24,10 +26,8 @@ const albumSchema = mongoose.Schema({
   },
   photos: [
     {
-      photoId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
+      type: mongoose.Types.ObjectId,
+      ref: "Photo",
     },
   ],
 });

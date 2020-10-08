@@ -7,26 +7,25 @@ const postSchema = mongoose.Schema({
   },
   authorId: {
     type: mongoose.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   miniAuthorId: {
     type: mongoose.Types.ObjectId,
+    ref: "MiniUser",
     required: true,
   },
   caption: {
     type: String,
   },
   album: {
-    albumId: {
-      type: mongoose.Types.ObjectId,
-    },
-    albumName: {
-      type: String,
-    },
+    type: mongoose.Types.ObjectId,
+    ref: "Album",
   },
   images: [
     {
       type: mongoose.Types.ObjectId,
+      ref: "Photo",
     },
   ],
   likesCount: {
@@ -45,6 +44,7 @@ const postSchema = mongoose.Schema({
     {
       userId: {
         type: mongoose.Types.ObjectId,
+        ref: "User",
         required: true,
       },
       displayName: {
@@ -57,6 +57,7 @@ const postSchema = mongoose.Schema({
     {
       commentId: {
         type: mongoose.Types.ObjectId,
+        ref: "Comment",
         required: true,
       },
     },

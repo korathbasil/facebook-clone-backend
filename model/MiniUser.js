@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const miniUserSchema = mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   displayName: {
