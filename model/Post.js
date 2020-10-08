@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const Users = require("./Users");
 
-const postsSchema = mongoose.Schema({
+const postSchema = mongoose.Schema({
   variant: {
     type: String,
     required: true,
@@ -70,4 +69,4 @@ const postsSchema = mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Posts", postsSchema);
+module.exports = mongoose.model("Post", postSchema);

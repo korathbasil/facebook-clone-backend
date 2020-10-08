@@ -15,4 +15,4 @@ const miniUserSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("MiniUsers", miniUserSchema);
+module.exports = mongoose.model("MiniUser", miniUserSchema);

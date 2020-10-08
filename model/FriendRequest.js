@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const frienRequestsSchema = mongoose.Schema({
+const frienRequestSchema = mongoose.Schema({
   senderId: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -19,4 +19,4 @@ const frienRequestsSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("FriendRequests", frienRequestsSchema);
+module.exports = mongoose.model("FriendRequest", frienRequestSchema);

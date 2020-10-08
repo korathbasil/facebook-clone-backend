@@ -1,4 +1,3 @@
-const { object } = require("@hapi/joi");
 const mongoose = require("mongoose");
 
 const albumSchema = mongoose.Schema({
@@ -33,4 +32,4 @@ const albumSchema = mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Albums", albumSchema);
+module.exports = mongoose.model("Album", albumSchema);

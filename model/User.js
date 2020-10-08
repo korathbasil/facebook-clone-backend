@@ -1,7 +1,6 @@
-const { string } = require("@hapi/joi");
 const mongoose = require("mongoose");
 
-const usersSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   profilePicture: {
     profilePictureUrl: {
       type: String,
@@ -111,4 +110,4 @@ const usersSchema = mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Users", usersSchema);
+module.exports = mongoose.model("User", userSchema);
