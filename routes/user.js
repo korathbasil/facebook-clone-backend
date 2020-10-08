@@ -62,6 +62,7 @@ router.get("/getFeed", verifyToken, (req, res) => {
 router.get("/getUser", (req, res) => {
   Users.findById(req.body.userId)
     .populate("albums")
+    .select("-password")
     .then((user) => {
       res.send(user);
     })

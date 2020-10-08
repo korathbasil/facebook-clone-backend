@@ -58,7 +58,18 @@ module.exports = {
           }
         });
       });
-      return res.status(201).json({ id: savedUser._id });
+      const token = jwt.sign(
+        { id: savedUser._id },
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      res.header("auth-token", token);
+      return res.status(201).json({
+        token: token,
+        email: savedUser.email,
+        displayName: savedUser.displayName,
+        profilePicture: savedUser.profilePicture,
+        friends: savedUser.friends,
+      });
     } catch {
       (err) => {
         res.status(400).send(err);
