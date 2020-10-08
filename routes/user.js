@@ -11,6 +11,8 @@ const {
   acceptRequest,
 } = require("../controller/user/friendRequest");
 const { uploadPost } = require("../controller/post");
+const getuser = require("../controller/user/getUser");
+const getUser = require("../controller/user/getUser");
 
 const router = express.Router();
 
@@ -60,13 +62,13 @@ router.get("/getFeed", verifyToken, (req, res) => {
 });
 
 router.get("/getUser", (req, res) => {
-  Users.findById(req.body.userId)
-    .populate("albums")
-    .select("-password")
+  getUser(req.body.userId)
     .then((user) => {
-      res.send(user);
+      res.status(200).send(user);
     })
-    .catch((e) => res.send(e));
+    .catch((e) => {
+      res.status(400).send(e);
+    });
 });
 
 module.exports = router;
