@@ -2,8 +2,8 @@ const express = require("express");
 const verifyToken = require("../util/verifyToken");
 
 // Model imports
-const Users = require("../model/Users");
-const Posts = require("../model/Posts");
+const Users = require("../model/User");
+const Posts = require("../model/Post");
 
 // Controller imports
 const {

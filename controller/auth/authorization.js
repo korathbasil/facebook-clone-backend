@@ -1,4 +1,4 @@
-const Users = require("../../model/Users");
+const Users = require("../../model/User");
 
 module.exports = {
   validateUser: (req, res) => {

@@ -1,5 +1,5 @@
 // Model imports
-const Posts = require("../../model/Posts");
+const Posts = require("../../model/Post");
 
 module.exports = {
   likePost: (req, res) => {

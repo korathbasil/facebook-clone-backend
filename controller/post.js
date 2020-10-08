@@ -3,10 +3,10 @@ const streamifier = require("streamifier");
 const imageBucket = require("../util/GCPbucket");
 
 // Model imports
-const Users = require("../model/Users");
+const Users = require("../model/User");
 const Photos = require("../model/Photo");
 const Albums = require("../model/Album");
-const Posts = require("../model/Posts");
+const Posts = require("../model/Post");
 
 module.exports = {
   uploadPost: (req, res) => {

@@ -1,6 +1,6 @@
 // Model imports
-const Posts = require("../../model/Posts");
-const Comments = require("../../model/Comments");
+const Posts = require("../../model/Post");
+const Comments = require("../../model/Comment");
 
 module.exports = {
   commentPost: (req, res) => {

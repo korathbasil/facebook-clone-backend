@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 
 // Model imports
-const Posts = require("../model/Posts");
-const Comments = require("../model/Comments");
+const Posts = require("../model/Post");
+const Comments = require("../model/Comment");
 
 // Controller imports
 const { uploadPost } = require("../controller/post");

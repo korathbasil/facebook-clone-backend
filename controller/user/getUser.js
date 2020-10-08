@@ -1,6 +1,6 @@
 // Model imports
-const Users = require("../../model/Users");
-const Posts = require("../../model/Posts");
+const Users = require("../../model/User");
+const Posts = require("../../model/Post");
 const Photos = require("../../model/Photo");
 module.exports = (userId) => {
   let loggedUser = {};

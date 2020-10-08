@@ -5,14 +5,14 @@ const { signupSchema, loginSchema } = require("../../util/validation");
 // Model imports
 const MiniUsers = require("../../model/MiniUser");
 const Albums = require("../../model/Album");
-const Users = require("../../model/Users.js");
+const Users = require("../../model/User.js");
 
 module.exports = {
   signup: async (req, res) => {
     // Data validation
     const { error } = signupSchema.validate(req.body);
     if (error) {
-      return res.status(400).send(error);
+      return res.status(400).send(error.details[0].message);
     }
     const userExists = await Users.findOne({ email: req.body.email });
     if (userExists) return res.send("email already exists");

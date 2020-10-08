@@ -1,5 +1,5 @@
 // Model imports
-const Users = require("../../model/Users");
+const Users = require("../../model/User");
 
 module.exports = {
   getFeed: (req, res) => {
