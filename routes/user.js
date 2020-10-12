@@ -56,12 +56,11 @@ router.post("/profilePicture", addToBucket, profilePicture);
 router.post("/coverPicture", addToBucket, coverPicture);
 
 router.get("/getFeed", verifyToken, (req, res) => {
-  let posts = [];
   Users.findById(req.userId)
     .populate({
       path: "feed",
       populate: {
-        path: "image",
+        path: "image authorId",
       },
     })
     .then((user) => {

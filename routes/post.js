@@ -11,6 +11,9 @@ const uploadPost = require("../controller/post/uploadPost");
 const { likePost } = require("../controller/post/likePost");
 const { commentPost } = require("../controller/post/commentPost");
 
+// Middleware imports
+const addToBucket = require("../middlewares/addToBucket");
+
 // Fetch all posts
 router.get("/getAll", (req, res) => {
   Posts.find({}, (err, data) => {
@@ -23,7 +26,7 @@ router.get("/getAll", (req, res) => {
 });
 
 // Uploading a post
-router.post("/upload", uploadPost);
+router.post("/upload", addToBucket, uploadPost);
 // Like or dislike a post
 router.post("/like", likePost);
 // Comment on a post

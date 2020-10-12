@@ -36,7 +36,7 @@ module.exports = {
       const albumsArray = [
         "Profile Pictures",
         "Cover Photos",
-        "Mobile Uploads",
+        "Timeline Photos",
       ];
       albumsArray.forEach((album) => {
         let newAlbum = {
