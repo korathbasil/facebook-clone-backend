@@ -12,6 +12,10 @@ const {
 } = require("../controller/user/friendRequest");
 const uploadPost = require("../controller/post/uploadPost");
 const getUser = require("../controller/user/getUser");
+const profilePicture = require("../controller/user/profilePicture");
+
+// Middleware imports
+const addToBucket = require("../middlewares/addToBucket");
 
 const router = express.Router();
 
@@ -45,7 +49,7 @@ router.put("/friendRequest", sendRequest);
 router.post("/friendRequest", acceptRequest);
 
 // Uploading a profile picture
-router.post("/profilePicture", uploadPost);
+router.post("/profilePicture", addToBucket, profilePicture);
 
 router.get("/getFeed", verifyToken, (req, res) => {
   let posts = [];

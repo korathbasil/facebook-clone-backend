@@ -4,13 +4,13 @@ const imageBucket = require("../util/GCPbucket");
 const sharp = require("sharp");
 
 module.exports = async (req, res, next) => {
-  const variant = req.body.variant;
+  const folder = req.body.folder;
   const file = req.files.image;
   const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
   const fileName = new Date().toISOString();
   await streamifier.createReadStream(new Buffer(file.data)).pipe(
     imageBucket
-      .file(`${variant}/original/${fileName}.${fileExtension}`)
+      .file(`${folder}/original/${fileName}.${fileExtension}`)
       .createWriteStream({
         resumable: false,
         gzip: true,
@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
     .then((data) => {
       streamifier.createReadStream(data).pipe(
         imageBucket
-          .file(`${variant}/small/${fileName}.${fileExtension}`)
+          .file(`${folder}/small/${fileName}.${fileExtension}`)
           .createWriteStream({
             resumable: false,
             gzip: true,
@@ -36,7 +36,7 @@ module.exports = async (req, res, next) => {
     .then((data) => {
       streamifier.createReadStream(data).pipe(
         imageBucket
-          .file(`${variant}/medium/${fileName}.${fileExtension}`)
+          .file(`${folder}/medium/${fileName}.${fileExtension}`)
           .createWriteStream({
             resumable: false,
             gzip: true,
@@ -45,9 +45,9 @@ module.exports = async (req, res, next) => {
     })
     .catch((e) => console.log(e));
   req.images = {
-    small: `https://storage.googleapis.com/fb-clone-images/${variant}/small/${fileName}.${fileExtension}`,
-    medium: `https://storage.googleapis.com/fb-clone-images/${variant}/medium/${fileName}.${fileExtension}`,
-    original: `https://storage.googleapis.com/fb-clone-images/${variant}/original/${fileName}.${fileExtension}`,
+    small: `https://storage.googleapis.com/fb-clone-images/${folder}/small/${fileName}.${fileExtension}`,
+    medium: `https://storage.googleapis.com/fb-clone-images/${folder}/medium/${fileName}.${fileExtension}`,
+    original: `https://storage.googleapis.com/fb-clone-images/${folder}/original/${fileName}.${fileExtension}`,
   };
   next();
 };

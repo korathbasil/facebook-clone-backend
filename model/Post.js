@@ -22,12 +22,11 @@ const postSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "Album",
   },
-  images: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: "Photo",
-    },
-  ],
+  image: {
+    type: mongoose.Types.ObjectId,
+    ref: "Photo",
+  },
+
   likesCount: {
     type: Number,
     default: 0,

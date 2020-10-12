@@ -19,7 +19,7 @@ const photoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  large: {
+  original: {
     type: String,
     required: true,
   },
