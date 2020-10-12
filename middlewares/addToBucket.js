@@ -8,35 +8,6 @@ module.exports = async (req, res, next) => {
   const file = req.files.image;
   const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
   const fileName = new Date().toISOString();
-  await sharp(new Buffer(file.data))
-    .resize({ width: 320 })
-    .toBuffer()
-    .then(async (data) => {
-      await streamifier.createReadStream(data).pipe(
-        imageBucket
-          .file(`${variant}/small/${fileName}.${fileExtension}`)
-          .createWriteStream({
-            resumable: false,
-            gzip: true,
-          })
-      );
-    })
-    .then((e) => res.send(e));
-  await sharp(new Buffer(file.data))
-    .resize({ width: 720 })
-    .toBuffer()
-    .then(async (data) => {
-      await streamifier.createReadStream(data).pipe(
-        imageBucket
-          .file(`${variant}/medium/${fileName}.${fileExtension}`)
-          .createWriteStream({
-            resumable: false,
-            gzip: true,
-          })
-      );
-    })
-    .then((e) => res.send(e));
-
   await streamifier.createReadStream(new Buffer(file.data)).pipe(
     imageBucket
       .file(`${variant}/original/${fileName}.${fileExtension}`)
@@ -45,5 +16,33 @@ module.exports = async (req, res, next) => {
         gzip: true,
       })
   );
+  await sharp(new Buffer(file.data))
+    .resize({ width: 320 })
+    .toBuffer()
+    .then((data) => {
+      streamifier.createReadStream(data).pipe(
+        imageBucket
+          .file(`${variant}/small/${fileName}.${fileExtension}`)
+          .createWriteStream({
+            resumable: false,
+            gzip: true,
+          })
+      );
+    })
+    .catch((e) => console.log(e));
+  await sharp(new Buffer(file.data))
+    .resize({ width: 720 })
+    .toBuffer()
+    .then((data) => {
+      streamifier.createReadStream(data).pipe(
+        imageBucket
+          .file(`${variant}/medium/${fileName}.${fileExtension}`)
+          .createWriteStream({
+            resumable: false,
+            gzip: true,
+          })
+      );
+    })
+    .catch((e) => console.log(e));
   next();
 };
