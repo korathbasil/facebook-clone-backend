@@ -12,7 +12,7 @@ module.exports = (req, res) => {
   const variant = req.body.variant;
   const altVariant = req.body.altVariant;
   const file = req.files.image;
-  let albumId, postId, variantPictureId, variantImageUrl;
+  let albumId, miniUserId, variantPictureId, variantImageUrl;
 
   Users.findById(req.body.userId).then((user) => {
     //   albumId = user.albums.map((album) => {
@@ -24,12 +24,14 @@ module.exports = (req, res) => {
       (album) => album.albumName === altVariant
     );
     albumId = user.albums[index].albumId;
-    user.save();
+    miniUserId = user.miniUserId;
   });
   const newImage = {
     userId: req.body.userId,
-    miniUserId: req.body.miniUserId,
-    imageUrl: `https://storage.googleapis.com/fb-clone-images/${variant}/${fileName}.${fileExtension}`,
+    miniUserId: miniUserId,
+    small: req.images.small,
+    medium: req.images.medium,
+    original: req.images.original,
     albumId: albumId,
   };
   Photos.create(newImage, (err, data) => {

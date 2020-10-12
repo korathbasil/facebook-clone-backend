@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
       })
   );
   await sharp(new Buffer(file.data))
-    .resize({ width: 320 })
+    .resize({ width: 360 })
     .toBuffer()
     .then((data) => {
       streamifier.createReadStream(data).pipe(
@@ -44,5 +44,10 @@ module.exports = async (req, res, next) => {
       );
     })
     .catch((e) => console.log(e));
+  req.images = {
+    small: `https://storage.googleapis.com/fb-clone-images/${variant}/small/${fileName}.${fileExtension}`,
+    medium: `https://storage.googleapis.com/fb-clone-images/${variant}/medium/${fileName}.${fileExtension}`,
+    original: `https://storage.googleapis.com/fb-clone-images/${variant}/original/${fileName}.${fileExtension}`,
+  };
   next();
 };

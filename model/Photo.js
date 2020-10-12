@@ -11,7 +11,15 @@ const photoSchema = mongoose.Schema({
     ref: "MiniUser",
     required: true,
   },
-  imageUrl: {
+  small: {
+    type: String,
+    required: true,
+  },
+  medium: {
+    type: String,
+    required: true,
+  },
+  large: {
     type: String,
     required: true,
   },
