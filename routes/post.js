@@ -7,7 +7,7 @@ const Posts = require("../model/Post");
 const Comments = require("../model/Comment");
 
 // Controller imports
-const { uploadPost } = require("../controller/post");
+const uploadPost = require("../controller/post/uploadPost");
 const { likePost } = require("../controller/post/likePost");
 const { commentPost } = require("../controller/post/commentPost");
 
