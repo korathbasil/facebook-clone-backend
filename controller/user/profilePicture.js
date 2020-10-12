@@ -39,7 +39,7 @@ module.exports = (req, res) => {
         miniAuthorId: req.body.miniUserId,
         caption: "",
         album: albumId,
-        images: data._id,
+        image: data._id,
       };
       Posts.create(post, (err, data) => {
         if (err) {
@@ -61,7 +61,7 @@ module.exports = (req, res) => {
 
               user.posts.push(data._id);
               user.feed.push(data._id);
-
+              user.recentNinePhotos.push(newImageId);
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)
                   .then((selectedFriend) => {

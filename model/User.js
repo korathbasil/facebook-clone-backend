@@ -67,14 +67,8 @@ const userSchema = mongoose.Schema({
   ],
   recentNinePhotos: [
     {
-      photoId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-      },
-      imageUrl: {
-        type: String,
-        required: true,
-      },
+      type: mongoose.Types.ObjectId,
+      ref: "Photo",
     },
   ],
   albums: [
