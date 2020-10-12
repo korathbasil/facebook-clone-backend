@@ -1,29 +1,19 @@
 const { Buffer } = require("buffer");
 const streamifier = require("streamifier");
-const imageBucket = require("../util/GCPbucket");
+const imageBucket = require("../../util/GCPbucket");
 
 // Model imports
-const Users = require("../model/User");
-const Photos = require("../model/Photo");
-const Albums = require("../model/Album");
-const Posts = require("../model/Post");
+const Users = require("../../model/User");
+const Photos = require("../../model/Photo");
+const Albums = require("../../model/Album");
+const Posts = require("../../model/Post");
 
 module.exports = (req, res) => {
   const variant = req.body.variant;
   const altVariant = req.body.altVariant;
   const file = req.files.image;
-  const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
-  const fileName = new Date().toISOString();
   let albumId, postId, variantPictureId, variantImageUrl;
 
-  streamifier.createReadStream(new Buffer(file.data)).pipe(
-    imageBucket
-      .file(`${variant}/${fileName}.${fileExtension}`)
-      .createWriteStream({
-        resumable: false,
-        gzip: true,
-      })
-  );
   Users.findById(req.body.userId).then((user) => {
     //   albumId = user.albums.map((album) => {
     //     if (album.albumName === variant) {

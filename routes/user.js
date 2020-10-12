@@ -10,7 +10,7 @@ const {
   sendRequest,
   acceptRequest,
 } = require("../controller/user/friendRequest");
-const { uploadPost } = require("../controller/post");
+const uploadPost = require("../controller/post/uploadPost");
 const getUser = require("../controller/user/getUser");
 
 const router = express.Router();

@@ -58,18 +58,19 @@ app.use("/post", postRoute);
 app.use("/user", userRoute);
 
 // Test file upload => SUCCESS
-
-// app.post("/testFile", async (req, res) => {
-//   const file = req.files.image;
-//   console.log(req.files, req.body);
-//   streamifier.createReadStream(new Buffer(file.data)).pipe(
-//     imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
-//       resumable: false,
-//       gzip: true,
-//     })
-//   );
-//   res.send(file);
-// });
+const addToBucket = require("./middlewares/addToBucket");
+app.post("/testFile", addToBucket, async (req, res) => {
+  // const file = req.files.image;
+  // console.log(req.files, req.body);
+  // streamifier.createReadStream(new Buffer(file.data)).pipe(
+  //   imageBucket.file(`profilePictures/${file.name}`).createWriteStream({
+  //     resumable: false,
+  //     gzip: true,
+  //   })
+  // );
+  // res.send(file);
+  res.send("done");
+});
 
 // Server listener
 server.listen(PORT, () => console.log("server started at " + PORT));
