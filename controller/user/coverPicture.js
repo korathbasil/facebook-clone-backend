@@ -8,7 +8,7 @@ module.exports = (req, res) => {
   let albumId, newImageId;
   Albums.findOne({
     userId: req.body.userId,
-    albumName: "Profile Pictures",
+    albumName: "Cover Pictures",
   }).then((album) => {
     albumId = album._id;
   });
@@ -47,18 +47,10 @@ module.exports = (req, res) => {
         } else {
           Users.findById(data.authorId)
             .then((user) => {
-              user.profilePicture = {
-                profilePictureUrl: req.images.small,
+              user.coverPicture = {
+                coverPictureUrl: req.images.medium,
                 imageId: newImageId,
               };
-
-              //   if (req.body.folder === "coverPictures") {
-              //     user.coverPicture = {
-              //       coverPictureUrl: req.images.medium,
-              //       imageId: newImageId,
-              //     };
-              //   }
-
               user.posts.push(data._id);
               user.feed.push(data._id);
 
