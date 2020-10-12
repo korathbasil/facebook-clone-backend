@@ -11,7 +11,6 @@ const {
   acceptRequest,
 } = require("../controller/user/friendRequest");
 const { uploadPost } = require("../controller/post");
-const getuser = require("../controller/user/getUser");
 const getUser = require("../controller/user/getUser");
 
 const router = express.Router();
@@ -61,7 +60,7 @@ router.get("/getFeed", verifyToken, (req, res) => {
   });
 });
 
-router.get("/getUser", (req, res) => {
+router.post("/getUser", (req, res) => {
   getUser(req.body.userId)
     .then((user) => {
       res.status(200).send(user);
