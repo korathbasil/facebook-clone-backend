@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   try {
     const verified = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.userId = verified.id;
-    console.log(req.userId);
+    // console.log(req.userId);
     next();
   } catch (err) {
     res.status(400).send("Access denied");

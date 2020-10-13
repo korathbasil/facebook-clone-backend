@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
+  miniUserId: {
+    type: mongoose.Types.ObjectId,
+    ref: "MiniUser",
+  },
   profilePicture: {
     profilePictureUrl: {
       type: String,

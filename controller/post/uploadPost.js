@@ -10,12 +10,19 @@ const Posts = require("../../model/Post");
 
 module.exports = (req, res) => {
   let albumId, newImageId;
-  Albums.findOne({
-    userId: req.body.userId,
-    albumName: "Timeline Photos",
-  }).then((album) => {
-    albumId = album._id;
-  });
+  Albums.findOne(
+    {
+      userId: req.body.userId,
+      albumName: "Timeline Photos",
+    },
+    (err, data) => {
+      console.log(err, data);
+      if (err) {
+      } else {
+        albumId = data._Id;
+      }
+    }
+  );
   const newImage = {
     userId: req.body.userId,
     miniUserId: req.body.miniUserId,

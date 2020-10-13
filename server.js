@@ -59,7 +59,8 @@ app.use("/user", userRoute);
 
 // Test file upload => SUCCESS
 const addToBucket = require("./middlewares/addToBucket");
-app.post("/testFile", addToBucket, async (req, res) => {
+app.post("/testFile", (req, res) => {
+  console.log(req.files);
   // const file = req.files.image;
   // console.log(req.files, req.body);
   // streamifier.createReadStream(new Buffer(file.data)).pipe(

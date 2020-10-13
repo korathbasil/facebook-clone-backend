@@ -50,6 +50,7 @@ module.exports = {
           } else {
             Users.findById(savedUser._id)
               .then((user) => {
+                user.miniUserId = savedMiniUser._id;
                 user.albums.push(data._id);
                 return user.save();
               })
