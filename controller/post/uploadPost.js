@@ -50,11 +50,11 @@ module.exports = (req, res) => {
             .then((user) => {
               user.posts.unshift(data._id);
               user.feed.unshift(data._id);
-              user.recentNinePhotos.push(newImageId);
+              user.recentNinePhotos.unshift(newImageId);
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)
                   .then((selectedFriend) => {
-                    selectedFriend.feed.push(data._id);
+                    selectedFriend.feed.unshift(data._id);
                     selectedFriend.save();
                   })
                   .catch((e) => console.log(e));

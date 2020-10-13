@@ -35,7 +35,7 @@ module.exports = {
       const savedMiniUser = await miniUser.save();
       const albumsArray = [
         "Profile Pictures",
-        "Cover Photos",
+        "Cover Pictures",
         "Timeline Photos",
       ];
       albumsArray.forEach((album) => {

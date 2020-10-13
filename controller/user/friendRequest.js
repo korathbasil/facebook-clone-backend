@@ -17,7 +17,7 @@ module.exports = {
         // Adding to friend request sent list of sending user
         Users.findById(req.body.userId)
           .then((user) => {
-            user.friendRequestsSent.push({
+            user.friendRequestsSent.unshift({
               requestId: data._id,
             });
             return user.save();
@@ -31,7 +31,7 @@ module.exports = {
           })
           .then(async ({ targetUser, result }) => {
             // console.log(targetUser);
-            targetUser.friendRequestsRecieved.push({
+            targetUser.friendRequestsRecieved.unshift({
               requestId: data._id,
             });
             savedTargetUser = await targetUser.save();
@@ -71,7 +71,7 @@ module.exports = {
               )
             );
             if (action) {
-              user.friends.push({
+              user.friends.unshift({
                 id: recieverId,
                 miniUserId: recieverMiniId,
               });
@@ -88,7 +88,7 @@ module.exports = {
               )
             );
             if (action) {
-              user.friends.push({
+              user.friends.unshift({
                 id: senderId,
                 miniUserId: senderMiniId,
               });

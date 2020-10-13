@@ -11,7 +11,6 @@ module.exports = (req, res) => {
     userId: req.body.userId,
     albumName: "Profile Pictures",
   }).then((album) => {
-    // console.log(album);
     albumId = album._id;
   });
   const newImage = {
@@ -28,11 +27,8 @@ module.exports = (req, res) => {
     } else {
       newImageId = data._id;
       Albums.findById(albumId).then((album) => {
-        album.latestPhoto = {
-          photoId: data._id,
-          iamgeUrl: req.images.small,
-        };
-        album.photos.push(data._id);
+        album.latestPhoto = data._id;
+        album.photos.unshift(data._id);
         album.save();
       });
       const post = {
@@ -63,7 +59,7 @@ module.exports = (req, res) => {
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)
                   .then((selectedFriend) => {
-                    selectedFriend.feed.push(data._id);
+                    selectedFriend.feed.unshift(data._id);
                     selectedFriend.save();
                   })
                   .catch((e) => console.log(e));

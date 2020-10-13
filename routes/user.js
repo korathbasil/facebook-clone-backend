@@ -31,7 +31,7 @@ router.post("/getDetails", (req, res) => {
       gender = user.gender;
       DOB = user.DOB;
       user.friends.forEach((friend) => {
-        friends.push(friend);
+        friends.unshift(friend);
       });
       res.status(200).json({
         email: email,
@@ -60,7 +60,7 @@ router.get("/getFeed", verifyToken, (req, res) => {
     .populate({
       path: "feed",
       populate: {
-        path: "image authorId",
+        path: "image miniAuthorId",
       },
     })
     .then((user) => {

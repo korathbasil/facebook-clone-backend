@@ -11,7 +11,7 @@ module.exports = {
       .then(async (post) => {
         if (action) {
           post.likesCount = post.likesCount + 1;
-          post.likes.push({
+          post.likes.unshift({
             userId: userId,
             displayName: displayName,
           });

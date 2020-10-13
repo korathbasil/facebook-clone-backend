@@ -17,7 +17,7 @@ module.exports = {
       } else {
         await Posts.findById(data.postId)
           .then((post) => {
-            post.comments.push({
+            post.comments.unshift({
               commentId: data._id,
             });
             return post.save();

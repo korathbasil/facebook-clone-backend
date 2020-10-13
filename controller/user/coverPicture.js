@@ -26,11 +26,8 @@ module.exports = (req, res) => {
     } else {
       newImageId = data._id;
       Albums.findById(albumId).then((album) => {
-        album.latestPhoto = {
-          photoId: data._id,
-          iamgeUrl: req.images.small,
-        };
-        album.photos.push(data._id);
+        album.latestPhoto = data._id;
+        album.photos.unshift(data._id);
         album.save();
       });
       const post = {
@@ -39,7 +36,7 @@ module.exports = (req, res) => {
         miniAuthorId: req.body.miniUserId,
         caption: "",
         album: albumId,
-        images: data._id,
+        image: data._id,
       };
       Posts.create(post, (err, data) => {
         if (err) {
@@ -51,13 +48,13 @@ module.exports = (req, res) => {
                 coverPictureUrl: req.images.medium,
                 imageId: newImageId,
               };
-              user.posts.push(data._id);
-              user.feed.push(data._id);
-              user.recentNinePhotos.push(newImageId);
+              user.posts.unshift(data._id);
+              user.feed.unshift(data._id);
+              user.recentNinePhotos.unshift(newImageId);
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)
                   .then((selectedFriend) => {
-                    selectedFriend.feed.push(data._id);
+                    selectedFriend.feed.unshift(data._id);
                     selectedFriend.save();
                   })
                   .catch((e) => console.log(e));
