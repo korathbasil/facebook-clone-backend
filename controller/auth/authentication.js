@@ -98,6 +98,8 @@ module.exports = {
     );
     res.header("auth-token", token);
     res.status(201).json({
+      id: selectedUser._id,
+      miniUserId: selectedUser.miniUserId,
       token: token,
       email: selectedUser.email,
       displayName: selectedUser.displayName,

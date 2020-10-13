@@ -5,7 +5,7 @@ const sharp = require("sharp");
 
 module.exports = async (req, res, next) => {
   const folder = req.body.folder;
-  const file = req.files.image[0];
+  const file = req.files.image;
   const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
   const fileName = new Date().toISOString();
   await streamifier.createReadStream(new Buffer(file.data)).pipe(

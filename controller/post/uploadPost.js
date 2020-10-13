@@ -10,19 +10,12 @@ const Posts = require("../../model/Post");
 
 module.exports = (req, res) => {
   let albumId, newImageId;
-  Albums.findOne(
-    {
-      userId: req.body.userId,
-      albumName: "Timeline Photos",
-    },
-    (err, data) => {
-      console.log(err, data);
-      if (err) {
-      } else {
-        albumId = data._Id;
-      }
-    }
-  );
+  Albums.findOne({
+    userId: req.body.userId,
+    albumName: "Timeline Photos",
+  }).then((album) => {
+    albumId = album._id;
+  });
   const newImage = {
     userId: req.body.userId,
     miniUserId: req.body.miniUserId,
@@ -37,11 +30,8 @@ module.exports = (req, res) => {
     } else {
       newImageId = data._id;
       Albums.findById(albumId).then((album) => {
-        album.latestPhoto = {
-          photoId: data._id,
-          iamgeUrl: req.images.small,
-        };
-        album.photos.push(data._id);
+        album.latestPhoto = data._id;
+        album.photos.unshift(data._id);
         album.save();
       });
       const post = {
@@ -58,8 +48,8 @@ module.exports = (req, res) => {
         } else {
           Users.findById(data.authorId)
             .then((user) => {
-              user.posts.push(data._id);
-              user.feed.push(data._id);
+              user.posts.unshift(data._id);
+              user.feed.unshift(data._id);
               user.recentNinePhotos.push(newImageId);
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)

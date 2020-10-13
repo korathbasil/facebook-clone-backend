@@ -59,8 +59,20 @@ app.use("/user", userRoute);
 
 // Test file upload => SUCCESS
 const addToBucket = require("./middlewares/addToBucket");
+const Albums = require("./model/Album");
+const { send } = require("process");
 app.post("/testFile", (req, res) => {
   console.log(req.files);
+  console.log(req.body);
+  Albums.findOne({
+    userId: req.body.userId,
+    albumName: "Timeline Photos",
+  })
+    .then((album) => {
+      res.send(album);
+      console.log(album);
+    })
+    .catch(() => res.send("Album not found"));
   // const file = req.files.image;
   // console.log(req.files, req.body);
   // streamifier.createReadStream(new Buffer(file.data)).pipe(
@@ -70,7 +82,7 @@ app.post("/testFile", (req, res) => {
   //   })
   // );
   // res.send(file);
-  res.send("done");
+  // res.send("done");
 });
 
 // Server listener

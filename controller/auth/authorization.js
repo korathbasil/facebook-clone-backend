@@ -6,7 +6,8 @@ module.exports = {
       Users.findById(req.userId)
         .then((user) => {
           const loggedUser = {
-            userId: req.userId,
+            id: req.userId,
+            miniUserId: user.miniUserId,
             email: user.email,
             displayName: user.displayName,
             profilePicture: user.profilePicture,
