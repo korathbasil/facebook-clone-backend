@@ -7,12 +7,12 @@ module.exports = (userId) => {
       .populate({
         path: "recentNinePhotos feed",
         populate: {
-          path: "image authorId",
+          path: "image miniAuthorId",
         },
       })
       .select("-password")
       .then((user) => {
-        console.log(user);
+        // console.log(user);
         resolved(user);
       })
       .catch((e) => rejected(e));

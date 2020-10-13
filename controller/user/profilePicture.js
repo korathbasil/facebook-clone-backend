@@ -11,6 +11,7 @@ module.exports = (req, res) => {
     userId: req.body.userId,
     albumName: "Profile Pictures",
   }).then((album) => {
+    // console.log(album);
     albumId = album._id;
   });
   const newImage = {
