@@ -3,6 +3,7 @@ const Users = require("../../model/User");
 const Photos = require("../../model/Photo");
 const Albums = require("../../model/Album");
 const Posts = require("../../model/Post");
+const MiniUser = require("../../model/MiniUser");
 
 module.exports = (req, res) => {
   let albumId, newImageId;
@@ -45,23 +46,19 @@ module.exports = (req, res) => {
         if (err) {
           res.status(500).send(err);
         } else {
+          MiniUser.findById(req.body.miniUserId).then((user) => {
+            user.profilePicture = req.images.small;
+            user.save();
+          });
           Users.findById(data.authorId)
             .then((user) => {
               user.profilePicture = {
                 profilePictureUrl: req.images.small,
                 imageId: newImageId,
               };
-
-              //   if (req.body.folder === "coverPictures") {
-              //     user.coverPicture = {
-              //       coverPictureUrl: req.images.medium,
-              //       imageId: newImageId,
-              //     };
-              //   }
-
-              user.posts.push(data._id);
-              user.feed.push(data._id);
-              user.recentNinePhotos.push(newImageId);
+              user.posts.unshift(data._id);
+              user.feed.unshift(data._id);
+              user.recentNinePhotos.unshift(newImageId);
               user.friends.forEach((friend) => {
                 Users.findById(friend.id)
                   .then((selectedFriend) => {
