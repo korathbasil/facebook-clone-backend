@@ -11,6 +11,7 @@ const getUser = require("./controller/user/getUser");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const userRoute = require("./routes/user");
+const chatRoute = require("./routes/chat");
 
 // App config
 const app = express();
@@ -56,6 +57,9 @@ app.use("/post", postRoute);
 
 //  User Route
 app.use("/user", userRoute);
+
+// Chat Route
+app.use("/chat", chatRoute);
 
 // Test file upload => SUCCESS
 const addToBucket = require("./middlewares/addToBucket");
