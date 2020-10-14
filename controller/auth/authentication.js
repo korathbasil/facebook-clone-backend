@@ -51,7 +51,7 @@ module.exports = {
             Users.findById(savedUser._id)
               .then((user) => {
                 user.miniUserId = savedMiniUser._id;
-                user.albums.push(data._id);
+                user.albums.unshift(data._id);
                 return user.save();
               })
               .then((result) => console.log(result))

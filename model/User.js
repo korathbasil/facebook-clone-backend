@@ -93,6 +93,12 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+  chats: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Chat",
+    },
+  ],
   friendRequestsRecieved: [
     {
       requestId: {
