@@ -97,7 +97,7 @@ const userSchema = mongoose.Schema({
     {
       other: {
         type: mongoose.Types.ObjectId,
-        ref: "MiniUser",
+        ref: "User",
       },
       chat: {
         type: mongoose.Types.ObjectId,
