@@ -6,23 +6,22 @@ const Message = require("../../model/Message");
 
 module.exports = (req, res) => {
   const newChat = {
+    parties: [req.body.miniUserId, req.body.miniRecieverId],
     messages: [],
   };
   Chat.create(newChat)
-    .then(async (chat) => {
-      await User.findById(req.userId).then(async (user) => {
-        user.chats.push({
-          other: req.body.recieverId,
-          chat: chat._id,
+    .then((chat) => {
+      MiniUser.findById(req.body.miniUserId).then((miniUser) => {
+        User.findById(miniUser.userId).then((user) => {
+          user.chats.push(chat._id);
+          user.save();
         });
-        await user.save();
       });
-      await User.findById(req.body.recieverId).then(async (user) => {
-        user.chats.push({
-          other: req.body.userId,
-          chat: chat._id,
+      MiniUser.findById(req.body.miniRecieverId).then((miniUser) => {
+        User.findById(miniUser.userId).then((user) => {
+          user.chats.push(chat._id);
+          user.save();
         });
-        await user.save();
       });
       res.send("chat created");
     })
