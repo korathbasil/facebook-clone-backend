@@ -6,12 +6,12 @@ module.exports = (userId) => {
     .select("miniUserId activeStatus friends")
     .populate({
       path: "friends",
-      select: "miniUserId activeStatus",
       populate: {
         path: "id",
+        select: "miniUserId activeStatus",
       },
     })
     .then((user) => {
-      console.log(user);
+      return user.friends;
     });
 };

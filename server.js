@@ -27,10 +27,12 @@ const login = require("./socket-helpers/login");
 io.on("connection", (socket) => {
   console.log("User connected");
   socket.on("login", (data) => {
+    // console.log(socket);
     login(data.userId);
     socket.join(data.userId);
+    console.log(socket.rooms);
   });
-  socket.on("disconnect", () => console.log("disconnected"));
+  socket.on("disconnect", () => {});
 });
 
 // DB config
