@@ -7,6 +7,9 @@ module.exports = (userId) => {
     .populate({
       path: "friends",
       select: "miniUserId activeStatus",
+      populate: {
+        path: "id",
+      },
     })
     .then((user) => {
       console.log(user);

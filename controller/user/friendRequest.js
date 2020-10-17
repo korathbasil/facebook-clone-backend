@@ -1,5 +1,6 @@
 // Model imports
 const FriendRequests = require("../../model/FriendRequest");
+const Users = require("../../model/User");
 
 module.exports = {
   sendRequest: (req, res) => {
