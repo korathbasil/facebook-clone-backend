@@ -1,11 +1,11 @@
 const http = require("http");
 const express = require("express");
 const mongoose = require("mongoose");
-const socketIo = require("socket.io");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const getUser = require("./controller/user/getUser");
+const socketIo = require("./socket-io");
 
 // Route imports
 const authRoute = require("./routes/auth");
@@ -16,9 +16,14 @@ const chatRoute = require("./routes/chat");
 // App config
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo.initIo(server);
 PORT = process.env.PORT || 8000;
 dotenv.config();
+
+io.on("connection", (socket) => {
+  console.log("User connected");
+  socket.on("disconnect", () => console.log("disconnected"));
+});
 
 // DB config
 mongoose.connect(
@@ -30,12 +35,6 @@ mongoose.connect(
   },
   () => console.log("Database connected")
 );
-
-// Socket listener
-io.on("connection", (socket) => {
-  console.log(" user connected");
-  socket.emit("connected", "Bazil");
-});
 
 // Middlewares
 app.use(fileUpload());
@@ -64,6 +63,7 @@ app.use("/chat", chatRoute);
 const addToBucket = require("./middlewares/addToBucket");
 const Albums = require("./model/Album");
 const { send } = require("process");
+const { getIo } = require("./socket-io");
 app.post("/testFile", (req, res) => {
   console.log(req.files);
   console.log(req.body);

@@ -38,6 +38,13 @@ const userSchema = mongoose.Schema({
     required: true,
     min: 6,
   },
+  bio: {
+    default: "",
+    type: String,
+  },
+  activeStatus: {
+    type: Boolean,
+  },
   gender: {
     type: String,
     required: true,
