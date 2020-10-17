@@ -79,32 +79,33 @@ module.exports = {
   },
 
   login: async (req, res) => {
-    const { error } = loginSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
-    const selectedUser = await Users.findOne({ email: req.body.email });
-    if (!selectedUser) return res.send("user not found");
-    const isPasswordValid = await bcrypt.compare(
-      req.body.password,
-      selectedUser.password
-    );
-    //   Create and assign token
-    if (!isPasswordValid)
-      return res.status(400).json({ message: "Incorrect password" });
-    const token = jwt.sign(
-      { id: selectedUser._id },
-      process.env.ACCESS_TOKEN_SECRET
-    );
-    res.header("auth-token", token);
-    res.status(201).json({
-      id: selectedUser._id,
-      miniUserId: selectedUser.miniUserId,
-      token: token,
-      email: selectedUser.email,
-      displayName: selectedUser.displayName,
-      profilePicture: selectedUser.profilePicture,
-      friends: selectedUser.friends,
-    });
+    setTimeout(async () => {
+      const { error } = loginSchema.validate(req.body);
+      if (error) {
+        return res.json({ message: error.details[0].message });
+      }
+      const selectedUser = await Users.findOne({ email: req.body.email });
+      if (!selectedUser) return res.json({ message: "User not found" });
+      const isPasswordValid = await bcrypt.compare(
+        req.body.password,
+        selectedUser.password
+      );
+      //   Create and assign token
+      if (!isPasswordValid) return res.json({ message: "Incorrect password" });
+      const token = jwt.sign(
+        { id: selectedUser._id },
+        process.env.ACCESS_TOKEN_SECRET
+      );
+      res.header("auth-token", token);
+      res.status(201).json({
+        id: selectedUser._id,
+        miniUserId: selectedUser.miniUserId,
+        token: token,
+        email: selectedUser.email,
+        displayName: selectedUser.displayName,
+        profilePicture: selectedUser.profilePicture,
+        friends: selectedUser.friends,
+      });
+    }, 1200);
   },
 };
