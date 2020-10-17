@@ -14,6 +14,10 @@ const miniUserSchema = mongoose.Schema({
     type: String,
     default: "",
   },
+  avtiveStatus: {
+    type: Boolean,
+    defualt: false,
+  },
 });
 
 module.exports = mongoose.model("MiniUser", miniUserSchema);

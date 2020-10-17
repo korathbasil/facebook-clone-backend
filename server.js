@@ -20,8 +20,16 @@ const io = socketIo.initIo(server);
 PORT = process.env.PORT || 8000;
 dotenv.config();
 
+// Socket-helpers import
+const login = require("./socket-helpers/login");
+
+// Socket listener
 io.on("connection", (socket) => {
   console.log("User connected");
+  socket.on("login", (data) => {
+    login(data.userId);
+    socket.join(data.userId);
+  });
   socket.on("disconnect", () => console.log("disconnected"));
 });
 
