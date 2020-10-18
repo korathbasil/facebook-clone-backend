@@ -21,16 +21,31 @@ PORT = process.env.PORT || 8000;
 dotenv.config();
 
 // Socket-helpers import
-const login = require("./socket-helpers/login");
+const getActiveFriends = require("./socket-helpers/getActiveFriends");
+const removeSocket = require("./socket-helpers/removeSocket");
+const setActiveStatus = require("./socket-helpers/setActiveStatus");
 
 // Socket listener
 io.on("connection", (socket) => {
   console.log("User connected");
   socket.on("login", (data) => {
-    // console.log(socket);
-    login(data.userId);
+    socket.userId = data.userId;
+    getActiveFriends(data.userId).then((activeFriends) => {
+      // console.log(activeFriends);
+      activeFriends.forEach((friend) => {
+        // io.sockets.connected[friend.socketId].join(socket.id);
+        socket.join(friend._id);
+        socket.broadcast.emit("hello");
+      });
+    });
     socket.join(data.userId);
-    console.log(socket.rooms);
+    setActiveStatus(data.userId, socket.id);
+  });
+  socket.on("disconnecting", () => {
+    // console.log(socket.rooms);
+    if (socket.userId) {
+      removeSocket(socket.userId);
+    }
   });
   socket.on("disconnect", () => {});
 });
