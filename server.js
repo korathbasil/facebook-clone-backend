@@ -32,16 +32,14 @@ io.on("connection", (socket) => {
   socket.on("login", (data) => {
     socket.userId = data.userId;
     socket.join(toString(data.userId));
+    setActiveStatus(data.userId, socket.id);
     getActiveFriends(data.userId).then((activeFriends) => {
       activeFriends.forEach((friend) => {
-        friendSocketId = friend.socketID;
-        console.log(friend);
-        io.to(toString(friend._id)).emit("hello");
+        socket.broadcast
+          .to(toString(friend.socketId))
+          .emit("hello", "Someone loggedIn");
       });
     });
-    // socket.to("chatroom").emit("hello");
-
-    setActiveStatus(data.userId, socket.id);
   });
   socket.on("disconnecting", () => {
     // console.log(socket.rooms);
