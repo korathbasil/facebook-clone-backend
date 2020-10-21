@@ -2,8 +2,7 @@ const { Buffer } = require("buffer");
 const streamifier = require("streamifier");
 const imageBucket = require("../../util/GCPbucket");
 
-const { getIo } = require("../../socket-io");
-const io = getIo();
+const io = require("../../socket-io");
 
 // Model imports
 const Users = require("../../model/User");
@@ -64,9 +63,8 @@ module.exports = (req, res) => {
                     .catch((e) => console.log(e));
                 });
                 user.save();
-              })
-              .then(() => {
-                io.to(toString(req.body.userId)).emit("new-post", {
+                console.log(io.getIo());
+                io.getIo().emit("new-post", {
                   post: data,
                 });
                 res.status(201).send("done success");
@@ -100,9 +98,7 @@ module.exports = (req, res) => {
                 .catch((e) => console.log(e));
             });
             user.save();
-          })
-          .then(() => {
-            io.to(toString(req.body.userId)).emit("new-post", {
+            io.getIo().to(toString(req.body.userId)).emit("new-post", {
               post: data,
             });
             res.status(201).send("done success");
