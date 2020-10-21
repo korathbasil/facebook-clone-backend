@@ -63,7 +63,7 @@ module.exports = (req, res) => {
                     .catch((e) => console.log(e));
                 });
                 user.save();
-                console.log(io.getIo());
+                // console.log(io.getIo());
                 io.getIo().emit("new-post", {
                   post: data,
                 });
