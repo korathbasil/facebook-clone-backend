@@ -35,11 +35,15 @@ io.on("connection", (socket) => {
     setActiveStatus(data.userId, socket.id);
     getActiveFriends(data.userId).then((activeFriends) => {
       activeFriends.forEach((friend) => {
+        socket.join(toString(friend._id));
         socket.broadcast
           .to(toString(friend.socketId))
-          .emit("hello", "Someone loggedIn");
+          .emit("new-user-login", { userId: data.userId });
       });
     });
+  });
+  socket.on("join-to-new-user", (data) => {
+    socket.join(toString(data.userId));
   });
   socket.on("disconnecting", () => {
     // console.log(socket.rooms);
