@@ -3,7 +3,7 @@ const verifyToken = require("../util/verifyToken");
 
 // Model imports
 const Users = require("../model/User");
-const Posts = require("../model/Post");
+const MiniUser = require("../model/MiniUser");
 
 // Controller imports
 const {
@@ -75,6 +75,16 @@ router.post("/getUser", (req, res) => {
     })
     .catch((e) => {
       res.status(400).send(e);
+    });
+});
+
+router.post("/search", (req, res) => {
+  MiniUser.find({ displayName: { $regex: req.body.searchText, $options: "i" } })
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((e) => {
+      res.status(405).send("User not found");
     });
 });
 

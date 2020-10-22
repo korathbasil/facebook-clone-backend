@@ -82,11 +82,11 @@ module.exports = async (req, res, next) => {
 };
 
 const smallImageUploader = (image, folder) => {
-  return new Promise((resolved, rejected) => {
+  return new Promise(async (resolved, rejected) => {
     const file = image;
     const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
     const fileName = new Date().toISOString();
-    sharp(new Buffer(file.data))
+    await sharp(new Buffer(file.data))
       .resize({ width: 360 })
       .toBuffer()
       .then((data) => {
@@ -113,11 +113,11 @@ const smallImageUploader = (image, folder) => {
 };
 
 const mediumImageUploader = (image, folder) => {
-  return new Promise((resolved, rejected) => {
+  return new Promise(async (resolved, rejected) => {
     const file = image;
     const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
     const fileName = new Date().toISOString();
-    sharp(new Buffer(file.data))
+    await sharp(new Buffer(file.data))
       .resize({ width: 720 })
       .toBuffer()
       .then((data) => {
@@ -143,11 +143,11 @@ const mediumImageUploader = (image, folder) => {
   });
 };
 const originalImageUploader = (image, folder) => {
-  return new Promise((resolved, rejected) => {
+  return new Promise(async (resolved, rejected) => {
     const file = image;
     const fileExtension = file.name.split(".")[file.name.split(".").length - 1];
     const fileName = new Date().toISOString();
-    streamifier
+    await streamifier
       .createReadStream(new Buffer(file.data))
       .pipe(
         imageBucket
