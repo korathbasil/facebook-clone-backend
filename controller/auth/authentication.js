@@ -65,11 +65,13 @@ module.exports = {
       );
       res.header("auth-token", token);
       return res.status(201).json({
+        miniUserId: savedMiniUser.miniUserId,
         token: token,
         email: savedUser.email,
         displayName: savedUser.displayName,
         profilePicture: savedUser.profilePicture,
         friends: savedUser.friends,
+        chats: [],
       });
     } catch {
       (err) => {
@@ -105,6 +107,7 @@ module.exports = {
         displayName: selectedUser.displayName,
         profilePicture: selectedUser.profilePicture,
         friends: selectedUser.friends,
+        chats: selectedUser.chats,
       });
     }, 1200);
   },

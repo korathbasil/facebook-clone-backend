@@ -110,6 +110,12 @@ const userSchema = mongoose.Schema({
       ref: "Chat",
     },
   ],
+  activeChats: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Chat",
+    },
+  ],
   friendRequestsRecieved: [
     {
       requestId: {

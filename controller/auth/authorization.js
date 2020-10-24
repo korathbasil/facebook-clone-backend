@@ -12,6 +12,7 @@ module.exports = {
             displayName: user.displayName,
             profilePicture: user.profilePicture,
             friends: user.friends,
+            chats: user.chats,
           };
           return loggedUser;
           // clg(user);
